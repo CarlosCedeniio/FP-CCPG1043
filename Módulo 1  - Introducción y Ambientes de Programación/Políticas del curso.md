@@ -23,7 +23,6 @@ Este documento presenta las indicaciones generales y las políticas del curso, a
 - AWS Academy Educator
 - ~ 6 años de experiencia como Senior Dev
 - SmartX Journal Club Founder
-- ccedeno.com
 
 ---
 
