@@ -42,17 +42,11 @@ Al finalizar este curso, serás capaz de:
 El curso está organizado en módulos temáticos. Cada módulo se encontrará en su propia carpeta dentro de este repositorio.
 
 * **[Módulo 1: Introducción y Ambientes de Programación](./Módulo%201%20%20-%20Introducción%20y%20Ambientes%20de%20Programación/)**
-    * 12 al 16 de Mayo 2025
 * **[Módulo 2: Tipos de datos, operadores, cadenas, listas y aleatoriedad](./Módulo%202%20-%20Tipos%20de%20datos,%20operadores,%20cadenas,%20listas%20y%20aleatoriedad/)**
-    * 19 al 27 de Mayo 2025
 * **[Módulo 3: Funciones](./Módulo%203%20-%20Funciones/)**
-    * 28 de Mayo al 3 de Junio 2025
 * **[Módulo 4: Estructuras de control](./Módulo%204%20-%20Estructuras%20de%20control/)**
-    * 9 de Junio al 17 de Julio de 2025
 * **[Módulo 5: Diccionarios](./Módulo%205%20-%20Diccionarios/)**
-    * Por revisar
 * **[Módulo 6: Pandas](./Módulo%206%20-%20Pandas/)**
-    * Por revisar
   
 
 ## Prerrequisitos

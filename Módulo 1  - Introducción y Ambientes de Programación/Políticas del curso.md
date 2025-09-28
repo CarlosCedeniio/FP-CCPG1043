@@ -1,11 +1,11 @@
 ---
 marp: true
 paginate: true
-footer: FP 2025 PAO I
+footer: FP 2025 PAO II
 ---
 
 # Fundamentos de Programación
-# 2025 PAO I 
+# 2025 PAO II 
 
 ### Prof. Carlos Cedeño
 
