@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Clase 02: Manipulación de Strings - ESPOL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 32px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; text-align: left; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 20px; width: 100%; text-align: left; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-size: 22px; line-height: 1.5; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; } .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; } .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34,42,53,0.1); }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+            
+            <section>
+                <h1 class="text-bold">Manipulación de Strings</h1>
+                <p class="text-muted">Unidad 02: Procesamiento de Texto</p>
+                <div style="margin-top: 60px;">
+                    <p class="text-small">Msc. Carlos Cedeño</p>
+                    <p class="text-small text-muted">Curso Transversal • ESPOL</p>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Acceso: Indexación</h2>
+                    <p>Cada carácter tiene una dirección única dentro del string.</p>
+                    <div class="cal-card">
+                        <pre><code class="python">materia = "Python"
+# P(0) y(1) t(2) h(3) o(4) n(5) 
+print(materia[0])   # Resultado: 'P'
+print(materia[-1])  # Resultado: 'n'</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Slicing (Rebanado)</h3>
+                    <p>Sintaxis: <code>string[inicio:fin]</code></p>
+                    <pre><code class="python">ciudad = "Guayaquil"
+print(ciudad[0:5]) # 'Guaya'
+print(ciudad[:5])  # 'Guaya' (equivale a 0:5)
+print(ciudad[5:])  # 'quil'  (hasta el final)</code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Transformación de Texto</h2>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Limpieza</h3>
+                            <p class="text-small"><code>.strip()</code> elimina espacios en los bordes.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Caja</h3>
+                            <p class="text-small"><code>.upper()</code>, <code>.lower()</code>, <code>.title()</code></p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>Ejemplo de Aplicación</h3>
+                    <pre><code class="python">correo = "   ESTUDIANTE@ESPOL.EDU.EC   "
+# Encadenamiento de métodos
+limpio = correo.strip().lower()
+print(f"'{limpio}'") # 'estudiante@espol.edu.ec'</code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Salida Dinámica: f-strings</h2>
+                    <p>La forma más legible de inyectar variables en un texto.</p>
+                    <div class="cal-card">
+                        <pre><code class="python">nombre = "Carlos"
+carrera = "Artes"
+# F antes de las comillas
+print(f"Bienvenido {nombre} de la carrera de {carrera}")</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Práctica en Clase 💻</h2>
+                </section>
+                <section>
+                    <h3>Reto 1: Sensor Térmico</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Limpia <code>"  temp:25.5C  "</code> para extraer solo <code>25.5</code> y mostrarlo en un f-string.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3>Reto 2: Username Maker</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Crea un correo ESPOL: <code>nombre[0] + apellido + "@espol.edu.ec"</code> todo en minúsculas.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3>Reto 3: Censurador</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Dada una frase, reemplaza cualquier mención de "Java" por "Python 🐍".</p>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <h2>¡Cuidado con la Inmutabilidad!</h2>
+                <div class="cal-card" style="border-left: 5px solid #242424;">
+                    <p class="text-small">Los métodos NO modifican el original. Debes reasignar.</p>
+                    <pre><code class="python">nombre = "espol"
+nombre.upper()    # No hace nada permanente
+nombre = nombre.upper() # Esto SÍ guarda el cambio</code></pre>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            plugins: [ RevealHighlight ]
+        });
+    </script>
+</body>
+</html>
