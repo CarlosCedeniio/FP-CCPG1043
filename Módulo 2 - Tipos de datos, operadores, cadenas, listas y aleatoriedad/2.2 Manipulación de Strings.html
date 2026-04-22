@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Clase 02: Manipulación de Strings - ESPOL</title>
+    <title>Clase 02: Dominio de Strings - ESPOL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
@@ -30,111 +30,185 @@
         <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
         <div class="slides">
             
-            <section>
-                <h1 class="text-bold">Manipulación de Strings</h1>
-                <p class="text-muted">Unidad 02: Procesamiento de Texto</p>
-                <div style="margin-top: 60px;">
-                    <p class="text-small">Msc. Carlos Cedeño</p>
-                    <p class="text-small text-muted">Curso Transversal • ESPOL</p>
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1.1;">
+                        Manipulación de Texto
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 02 • Clase 02: Métodos de Strings
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Dominio de herramientas para transformar, validar y limpiar datos textuales. 
+                        Desde la limpieza de espacios hasta la división de estructuras complejas.
+                    </p>
                 </div>
             </section>
 
             <section>
                 <section>
-                    <h2>Acceso: Indexación</h2>
-                    <p>Cada carácter tiene una dirección única dentro del string.</p>
-                    <div class="cal-card">
-                        <pre><code class="python">materia = "Python"
-# P(0) y(1) t(2) h(3) o(4) n(5) 
-print(materia[0])   # Resultado: 'P'
-print(materia[-1])  # Resultado: 'n'</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>Slicing (Rebanado)</h3>
-                    <p>Sintaxis: <code>string[inicio:fin]</code></p>
-                    <pre><code class="python">ciudad = "Guayaquil"
-print(ciudad[0:5]) # 'Guaya'
-print(ciudad[:5])  # 'Guaya' (equivale a 0:5)
-print(ciudad[5:])  # 'quil'  (hasta el final)</code></pre>
-                </section>
-            </section>
-
-            <section>
-                <section>
-                    <h2>Transformación de Texto</h2>
+                    <h2>1. Transformación de Caja</h2>
+                    <p>Útiles para normalizar datos ingresados por usuarios.</p>
                     <div class="grid-2">
                         <div class="cal-card">
-                            <h3>Limpieza</h3>
-                            <p class="text-small"><code>.strip()</code> elimina espacios en los bordes.</p>
+                            <h3>Mayúsculas / Minúsculas</h3>
+                            <pre><code class="python">txt = "EsPoL"
+print(txt.upper()) # ESPOL
+print(txt.lower()) # espol</code></pre>
                         </div>
                         <div class="cal-card">
-                            <h3>Caja</h3>
-                            <p class="text-small"><code>.upper()</code>, <code>.lower()</code>, <code>.title()</code></p>
+                            <h3>Formato Título</h3>
+                            <pre><code class="python">nom = "juan perez"
+print(nom.title())     # Juan Perez
+print(nom.capitalize())# Juan perez</code></pre>
                         </div>
                     </div>
                 </section>
                 <section>
-                    <h3>Ejemplo de Aplicación</h3>
-                    <pre><code class="python">correo = "   ESTUDIANTE@ESPOL.EDU.EC   "
-# Encadenamiento de métodos
-limpio = correo.strip().lower()
-print(f"'{limpio}'") # 'estudiante@espol.edu.ec'</code></pre>
-                </section>
-            </section>
-
-            <section>
-                <section>
-                    <h2>Salida Dinámica: f-strings</h2>
-                    <p>La forma más legible de inyectar variables en un texto.</p>
+                    <h3>Swapcase y Casefold</h3>
+                    <p class="text-muted"><code>swapcase()</code> invierte mayúsculas y minúsculas.</p>
                     <div class="cal-card">
-                        <pre><code class="python">nombre = "Carlos"
-carrera = "Artes"
-# F antes de las comillas
-print(f"Bienvenido {nombre} de la carrera de {carrera}")</code></pre>
+                        <pre><code class="python">alerta = "Atención Estudiantes"
+print(alerta.swapcase()) # aTENCIÓN eSTUDIANTES</code></pre>
                     </div>
                 </section>
             </section>
 
             <section>
                 <section>
-                    <h2>Práctica en Clase 💻</h2>
-                </section>
-                <section>
-                    <h3>Reto 1: Sensor Térmico</h3>
+                    <h2>2. Búsqueda y Conteo</h2>
+                    <p>¿Cómo encontrar patrones dentro de una cadena?</p>
                     <div class="cal-card">
-                        <p class="text-small">Limpia <code>"  temp:25.5C  "</code> para extraer solo <code>25.5</code> y mostrarlo en un f-string.</p>
+                        <pre><code class="python">frase = "Programar en Python es genial, amo Python"
+# Cuenta ocurrencias
+print(frase.count("Python")) # 2
+
+# Encuentra la posición (índice)
+print(frase.find("genial"))  # 23
+print(frase.find("Java"))    # -1 (no existe)</code></pre>
                     </div>
                 </section>
                 <section>
-                    <h3>Reto 2: Username Maker</h3>
+                    <h3>Validación de Extremos</h3>
+                    <p>Muy usado para filtrar archivos o dominios de correo.</p>
                     <div class="cal-card">
-                        <p class="text-small">Crea un correo ESPOL: <code>nombre[0] + apellido + "@espol.edu.ec"</code> todo en minúsculas.</p>
-                    </div>
-                </section>
-                <section>
-                    <h3>Reto 3: Censurador</h3>
-                    <div class="cal-card">
-                        <p class="text-small">Dada una frase, reemplaza cualquier mención de "Java" por "Python 🐍".</p>
+                        <pre><code class="python">correo = "cedeno@espol.edu.ec"
+print(correo.endswith("@espol.edu.ec")) # True
+
+archivo = "notas.pdf"
+print(archivo.startswith("notas")) # True</code></pre>
                     </div>
                 </section>
             </section>
 
             <section>
-                <h2>¡Cuidado con la Inmutabilidad!</h2>
-                <div class="cal-card" style="border-left: 5px solid #242424;">
-                    <p class="text-small">Los métodos NO modifican el original. Debes reasignar.</p>
-                    <pre><code class="python">nombre = "espol"
-nombre.upper()    # No hace nada permanente
-nombre = nombre.upper() # Esto SÍ guarda el cambio</code></pre>
-                </div>
+                <section>
+                    <h2>3. Limpieza y Reemplazo</h2>
+                    <p>Fundamental para procesar datos "sucios" o de formularios.</p>
+                    <div class="cal-card">
+                        <pre><code class="python">usuario = "   carlos_99   \n"
+# Elimina espacios, tabs y saltos de línea
+limpio = usuario.strip()
+print(f"'{limpio}'") # 'carlos_99'</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Método .replace()</h3>
+                    <p>Sustituye todas las ocurrencias de un sub-string.</p>
+                    <div class="cal-card">
+                        <pre><code class="python">fecha = "22/10/2023"
+nueva_fecha = fecha.replace("/", "-")
+print(nueva_fecha) # 22-10-2023</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>4. Validación de Tipos</h2>
+                    <p>¿Qué contiene realmente el string?</p>
+                    <table class="cal-table">
+                        <thead>
+                            <tr>
+                                <th>Método</th>
+                                <th>Verifica si...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>.isdigit()</code></td><td>Solo contiene números (0-9)</td></tr>
+                            <tr><td><code>.isalpha()</code></td><td>Solo contiene letras</td></tr>
+                            <tr><td><code>.isalnum()</code></td><td>Letras y números (no símbolos)</td></tr>
+                            <tr><td><code>.isspace()</code></td><td>Solo espacios en blanco</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section>
+                    <h3>Ejemplo de Validación</h3>
+                    <div class="cal-card">
+                        <pre><code class="python">cedula = "0912345678"
+if cedula.isdigit():
+    print("Cédula válida (solo números)")
+else:
+    print("Error: La cédula contiene caracteres extraños")</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>5. Split y Join</h2>
+                    <p>Convertir strings en listas y viceversa.</p>
+                    <div class="cal-card">
+                        <h3>Split (Dividir)</h3>
+                        <pre><code class="python">data = "Artes,Ingenieria,Humanidades"
+carreras = data.split(",") 
+# Resultado: ['Artes', 'Ingenieria', 'Humanidades']</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Join (Unir)</h3>
+                    <p class="text-muted">El string que llama al método es el "pegamento".</p>
+                    <div class="cal-card">
+                        <pre><code class="python">lista = ["Python", "es", "facil"]
+frase = " ".join(lista)
+print(frase) # "Python es facil"</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Laboratorio de Strings 🧪</h2>
+                    <p class="text-muted">Resuelve los siguientes retos en tu entorno:</p>
+                </section>
+                <section>
+                    <h3>Reto 1: Formateador de Nombres</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Recibe <code>"  mArIa dEl caRmeN  "</code>. Debes devolverlo sin espacios y en formato título.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3>Reto 2: Extractor de Dominio</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Dada la cadena <code>"ID:12345-USER:jdoe@espol.edu.ec"</code>, extrae solo el correo usando <code>split()</code>.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3>Reto 3: Validador de Password</h3>
+                    <div class="cal-card">
+                        <p class="text-small">Verifica si un password tiene al menos 8 caracteres y no es puramente numérico (usa <code>isdigit</code>).</p>
+                    </div>
+                </section>
             </section>
 
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
     <script>
         Reveal.initialize({
