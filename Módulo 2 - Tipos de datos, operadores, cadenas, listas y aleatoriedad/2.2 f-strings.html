@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Formateo de Salida</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 24px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+            
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Formateo de Salida
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 02
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Presentación profesional de datos: Inserción de variables en textos, 
+                        redondeo dinámico y el estándar f-string en Python 3.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2 style="text-align: left;">La necesidad de "inyectar" datos</h2>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3 class="text-bold">El problema de la concatenación</h3>
+                            <p class="text-muted" style="font-size: 20px;">
+                                Usar el símbolo <code>+</code> para unir textos y variables es tedioso y propenso a errores (requiere convertir todo a <code>str</code>).
+                            </p>
+                        </div>
+                        <div class="cal-card">
+                            <h3 class="text-bold">La solución: Formateo</h3>
+                            <p class="text-muted" style="font-size: 20px;">
+                                Permite crear "plantillas" de texto donde Python rellena los espacios con valores reales de forma automática.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 style="text-align: left;">Evolución del Formateo</h2>
+                    <div class="cal-card" style="text-align: left;">
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li style="margin-bottom: 20px;">
+                                <span class="text-bold" style="font-size: 32px;">1. f-strings</span> 
+                                <span class="text-muted">(Python 3.6+)</span>
+                                <p style="font-size: 22px; margin-top: 5px;">El estándar actual. Rápido, legible y elegante.</p>
+                            </li>
+                            <li style="margin-bottom: 20px;">
+                                <span class="text-bold" style="font-size: 32px;">2. .format()</span>
+                                <span class="text-muted">(Python 2.7 / 3.0)</span>
+                                <p style="font-size: 22px; margin-top: 5px;">Versátil, pero requiere más código. Útil para plantillas externas.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2 style="text-align: left;">f-strings: El estándar moderno</h2>
+                    <p style="text-align: left;" class="text-muted">Se identifican por la letra <code>f</code> antes de las comillas.</p>
+                    <pre><code class="python">
+nombre = "Carlos"
+materia = "Fundamentos de Programación"
+
+# Las variables van directamente entre llaves {}
+mensaje = f"Hola {nombre}, bienvenido a {materia}"
+print(mensaje)
+                    </code></pre>
+                </section>
+                <section>
+                    <h2 style="text-align: left;">Poder oculto: Redondeo</h2>
+                    <p style="text-align: left;" class="text-muted">Controla cuántos decimales mostrar sin modificar el valor real.</p>
+                    <pre><code class="python">
+pi = 3.14159265
+# :.2f significa "redondear a 2 decimales flotantes"
+print(f"El valor aproximado de PI es {pi:.2f}")
+
+precio = 125.4
+print(f"Total a pagar: ${precio:.2f}") 
+# Salida: Total a pagar: $125.40
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2 style="text-align: left;">str.format(): La alternativa</h2>
+                    <p style="text-align: left;" class="text-muted">Utiliza marcadores de posición <code>{}</code> que se llenan al final.</p>
+                    <pre><code class="python">
+carrera = "Ingeniería"
+facultad = "FIMCP"
+
+texto = "Estudio {} en la {}".format(carrera, facultad)
+print(texto)
+                    </code></pre>
+                </section>
+                <section>
+                    <h2 style="text-align: left;">¿Por qué usar .format()?</h2>
+                    <div class="cal-card" style="text-align: left;">
+                        <p style="font-size: 22px;">1. Es compatible con versiones antiguas de Python.</p>
+                        <p style="font-size: 22px;">2. Permite reutilizar la misma variable en varios lugares fácilmente.</p>
+                    </div>
+                    <pre><code class="python">
+# Usando índices
+msg = "{0} es de la ESPOL. ¡Vamos {0}!".format("Ana")
+print(msg)
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <h2 style="text-align: left;">Reto en Clase</h2>
+                <div class="cal-card" style="text-align: left;">
+                    <p class="text-bold">Crea un reporte de estudiante:</p>
+                    <p class="text-muted" style="font-size: 20px;">
+                        Variables: <code>nom = "Luis"</code>, <code>prom = 8.5678</code>.<br>
+                        Debes imprimir: <code>"Estudiante: Luis | Promedio: 8.57"</code>
+                    </p>
+                </div>
+                <pre><code class="python">
+# Tu código aquí:
+nom = "Luis"
+prom = 8.5678
+
+# Hint: Usa f-string y el formateador :.2f
+                </code></pre>
+            </section>
+
+            <section>
+                <h2 style="text-align: left;">Errores Comunes</h2>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 class="text-bold">Olvidar la 'f'</h3>
+                        <p class="text-muted" style="font-size: 18px;">
+                            Si escribes <code>"{var}"</code> en lugar de <code>f"{var}"</code>, Python imprimirá las llaves literalmente.
+                        </p>
+                    </div>
+                    <div class="cal-card">
+                        <h3 class="text-bold">Tipos incompatibles</h3>
+                        <p class="text-muted" style="font-size: 18px;">
+                            El redondeo <code>:.2f</code> solo funciona con números. Aplicarlo a un texto causará un <code>ValueError</code>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+    </script>
+</body>
+</html>

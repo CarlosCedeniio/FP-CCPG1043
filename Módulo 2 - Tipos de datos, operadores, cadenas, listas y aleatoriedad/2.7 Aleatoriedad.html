@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Valores Aleatorios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-image { border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; background: #ffffff; padding: 8px; max-height: 520px; display: block; margin: 0 auto; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 24px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; } .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; font-weight: 600; } .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34,42,53,0.1); font-family: 'Roboto Mono', monospace; text-align: left; } .cal-table td:last-child { font-family: 'Inter', sans-serif; color: #898989; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+            
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Valores Aleatorios
+                    </h1>
+                    
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 02
+                    </h2>
+
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        El módulo <code>random</code>: Técnicas para generar azar, realizar selecciones múltiples 
+                        y desordenar colecciones de datos en Python.
+                    </p>
+                </div>
+            </section>
+            
+            <section>
+    <section>
+        <h2 class="text-muted">Ampliando Python</h2>
+        <h1>¿Qué es una Librería?</h1>
+        <div class="grid-2">
+            <div class="cal-card">
+                <h3>Definición</h3>
+                <p class="text-small">Es un conjunto de herramientas (código) ya escritas por expertos que podemos "pedir prestadas" para no tener que inventar todo desde cero.</p>
+            </div>
+            <div class="cal-card">
+                <h3>Analogía</h3>
+                <p class="text-small">Python es como un teléfono nuevo. Las <b>librerías</b> son las "Apps" que instalas para darle funciones extra (GPS, Cámara, Juegos).</p>
+            </div>
+        </div>
+        <div class="cal-card" style="margin-top: 24px;">
+            <p class="text-small">Se activan con la palabra clave <code class="text-bold">import nombre_libreria</code></p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="text-muted">Anatomía del Código</h2>
+        <h1>Métodos y Argumentos</h1>
+        <div class="cal-card">
+            <p>Para usar una herramienta, debemos entender sus partes:</p>
+            <div style="background: #242424; color: #f8f9fa; padding: 30px; border-radius: 12px; font-family: 'Roboto Mono'; font-size: 32px; text-align: center; margin: 30px 0;">
+                lista.<span style="text-decoration: underline; color: #898989;">index</span>(<span style="color: #ffffff; border-bottom: 2px solid #ffffff;">"Dato"</span>)
+            </div>
+            <div class="grid-2">
+                <div>
+                    <h3 style="font-size: 20px;">1. El Método</h3>
+                    <p class="text-small text-muted">Es la <b>acción</b> que realiza el objeto. (Ej: .index, .choice, .upper).</p>
+                </div>
+                <div>
+                    <h3 style="font-size: 20px;">2. El Argumento</h3>
+                    <p class="text-small text-muted">Son los <b>ingredientes</b> o la información extra que el método necesita para funcionar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="text-muted">Ejemplo Aplicado</h2>
+        <h1>Librería Random</h1>
+        <div class="cal-card">
+            <pre><code class="language-python">
+import random # 1. Abrimos la caja de herramientas
+
+# 2. Usamos el método 'randint'
+# 3. Le pasamos los argumentos (1 y 100)
+numero = random.randint(1, 100)
+            </code></pre>
+            <div style="margin-top: 20px; text-align: left;">
+                <p class="text-small"><b class="text-bold">Traducción humana:</b> "Python, busca en la librería <i>random</i> la herramienta para crear enteros (<i>randint</i>) y úsala con los límites <i>1 y 100</i>".</p>
+            </div>
+        </div>
+    </section>
+</section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Importar Herramientas</h2>
+                    <h1>El Módulo <code class="text-bold" style="font-size: 56px;">random</code></h1>
+                    <div class="cal-card">
+                        <p>Python tiene herramientas incorporadas, pero algunas vienen guardadas en cajas especiales llamadas <b>módulos</b> para ahorrar memoria. Para usar el azar, primero debemos abrir esa caja usando la palabra clave <code class="text-bold">import</code>.</p>
+                        <pre style="margin-top: 20px; width: auto; display: inline-block; padding: 15px;"><code class="language-python">import random</code></pre>
+                    </div>
+                </section>
+                
+                <section>
+                    <h2 class="text-muted">Lanzando los Dados</h2>
+                    <h1>Números Enteros: <code class="text-bold" style="font-size: 56px;">randint</code></h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>¿Qué hace?</h3>
+                            <p class="text-small">Genera un número entero aleatorio entre un valor inicial y uno final.</p>
+                            <p class="text-small text-muted" style="margin-top: 10px;">Ej: Simular un dado de 6 caras.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>⚠️ Regla Especial</h3>
+                            <p class="text-small">A diferencia de otras funciones en Python, <code class="text-bold">randint(a, b)</code> <b>SÍ incluye</b> el último número (b).</p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            
+            <section>
+    <section>
+        <h2 class="text-muted">Probabilidades y Porcentajes</h2>
+        <h1>El Método <code class="text-bold" style="font-size: 56px;">.random()</code></h1>
+        <div class="grid-2">
+            <div class="cal-card">
+                <h3>¿Qué hace?</h3>
+                <p class="text-small">Genera un número decimal (float) estrictamente entre <b>0.0 y 1.0</b> (sin incluir el 1.0).</p>
+            </div>
+            <div class="cal-card">
+                <h3>Casos de uso</h3>
+                <p class="text-small">Es ideal para simular probabilidades. Piensa en ello como un porcentaje al azar entre 0% y 99.9%.</p>
+            </div>
+        </div>
+        <div class="cal-card" style="margin-top: 24px;">
+            <pre><code class="language-python">
+import random
+
+# Generar una probabilidad de lluvia
+probabilidad = random.random()
+print(probabilidad) # Salida de ejemplo: 0.73419283
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="text-muted">Decimales en un Rango</h2>
+        <h1>El Método <code class="text-bold" style="font-size: 56px;">.uniform()</code></h1>
+        <div class="cal-card">
+            <p>Si <code class="text-bold">randint</code> te da un entero exacto entre dos números, <code class="text-bold">uniform(a, b)</code> te da <b>cualquier valor decimal posible</b> entre esos dos límites.</p>
+            
+            <div class="grid-2" style="margin-top: 20px;">
+                <div>
+                    <h3 style="font-size: 20px;">La Analogía</h3>
+                    <p class="text-small text-muted">Medir algo en el mundo real. Si mides la temperatura, rara vez es exactamente 25 grados; puede ser 25.43 grados.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px dashed #898989; text-align: center;">
+                    <p class="text-small text-bold text-center" style="margin: 0; color: #242424;">Argumentos requeridos:</p>
+                    <p class="text-small" style="margin-top: 5px;">(límite_inferior, límite_superior)</p>
+                </div>
+            </div>
+        </div>
+        <pre><code class="language-python">
+# Generar el peso aleatorio de una manzana entre 100g y 150g
+peso = random.uniform(100.0, 150.0)
+
+# Redondear para que no se vea feo en pantalla
+peso_final = round(peso, 2)
+print(peso_final) # Salida de ejemplo: 134.57
+        </code></pre>
+    </section>
+</section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Extraer Elementos</h2>
+                    <h1>La Familia "Choice"</h1>
+                    <div class="cal-card">
+                        <p>Cuando ya tienes una lista y quieres elegir elementos al azar de ella, Python te ofrece tres estrategias diferentes:</p>
+                        <table class="cal-table">
+                            <thead>
+                                <tr>
+                                    <th>Método</th>
+                                    <th>Cantidad</th>
+                                    <th>¿Se pueden repetir? (Reemplazo)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code class="text-bold">.choice()</code></td>
+                                    <td>1 solo elemento</td>
+                                    <td>No aplica</td>
+                                </tr>
+                                <tr>
+                                    <td><code class="text-bold">.choices()</code></td>
+                                    <td>Varios (k)</td>
+                                    <td><b>SÍ.</b> (Devuelve el papel a la bolsa)</td>
+                                </tr>
+                                <tr>
+                                    <td><code class="text-bold">.sample()</code></td>
+                                    <td>Varios (k)</td>
+                                    <td><b>NO.</b> (Se queda con el papel)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Modificando la Lista</h2>
+                    <h1>Desordenar: <code class="text-bold" style="font-size: 56px;">shuffle</code></h1>
+                    <div class="cal-card">
+                        <p>El método <code class="text-bold">random.shuffle(lista)</code> funciona exactamente como <b>barajar un mazo de cartas</b>.</p>
+                        
+                        <div style="background: #f8f9fa; border: 2px dashed #898989; border-radius: 8px; padding: 20px; margin-top: 20px; text-align: center;">
+                            <p class="text-small text-bold" style="margin-bottom: 10px;">[ 1, 2, 3, 4 ] &nbsp; ➡️ &nbsp; 🔄 SHUFFLE 🔄 &nbsp; ➡️ &nbsp; [ 3, 1, 4, 2 ]</p>
+                        </div>
+                        <p class="text-small" style="margin-top: 20px;"><b>Cuidado:</b> Modifica la lista original <i>"in-place"</i> (en su mismo lugar). Nunca hagas <code style="color:#d32f2f;">x = random.shuffle(lista)</code>, porque destruirás tu variable.</p>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Código en Acción</h2>
+                    <pre><code class="language-python">
+import random
+
+estudiantes = ["Ana", "Luis", "Marta", "Carlos", "Eva"]
+
+# 1. Un solo ganador
+ganador = random.choice(estudiantes)
+
+# 2. Dos voluntarios (no puede ser la misma persona 2 veces)
+voluntarios = random.sample(estudiantes, k=2)
+
+# 3. Lanzar una moneda 3 veces (puede salir "Cara" varias veces)
+moneda = ["Cara", "Sello"]
+lanzamientos = random.choices(moneda, k=3)
+
+# 4. Barajar el orden de exposición
+random.shuffle(estudiantes)
+print(estudiantes)
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <h2 class="text-muted">Resolución de Problemas</h2>
+                <h1>Errores Comunes</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">NameError</h3>
+                        <p class="text-small"><i>"name 'random' is not defined"</i>. Ocurre si olvidas escribir <code class="text-bold">import random</code> al inicio de tu archivo.</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">ValueError en Sample</h3>
+                        <p class="text-small">Tratar de sacar más elementos de los que hay. Ej: Usar <code class="text-bold">sample(lista, k=5)</code> en una lista que solo tiene 3 elementos.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

@@ -1,11 +1,5 @@
----
-marp: true
-paginate: true
-footer: FP 2025 PAO II
----
-
 # Fundamentos de Programación
-# 2025 PAO II 
+# 2026 PAO I
 
 ### Prof. Carlos Cedeño
 
@@ -21,6 +15,7 @@ Este documento presenta las indicaciones generales y las políticas del curso, a
 - Docente e investigador @ ESPOL / CTI
 - CTO @ Forward Consulting
 - AWS Academy Educator
+- Account Manager GoodAI LLC.
 - ~ 6 años de experiencia como Senior Dev
 - SmartX Journal Club Founder
 
@@ -29,7 +24,6 @@ Este documento presenta las indicaciones generales y las políticas del curso, a
 # Información de contacto
 
 -   caencede@espol.edu.ec <- Medio de contacto formal
--   MS Teams              <- Medio de contacto informal
 -   Oficina 11F 115, previa planificación
 -   Preferible no escribir por AV
 

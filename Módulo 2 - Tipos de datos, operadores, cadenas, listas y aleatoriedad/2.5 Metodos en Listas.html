@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 02: Listas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px, rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, rgba(34, 42, 53, 0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px, rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, rgba(34, 42, 53, 0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 24px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; } .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; font-weight: 600; } .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34,42,53,0.1); font-family: 'Roboto Mono', monospace; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+            
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">Métodos en Listas</h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">Unidad 02</h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Manipulación avanzada de colecciones: métodos de inserción, 
+                        eliminación, ordenamiento y búsqueda de datos.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Conceptos</h2>
+                    <h1>Definición y Estructura</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Mutable</h3>
+                            <p>A diferencia de los strings, las listas <b>pueden cambiar</b> sus elementos sin necesidad de crear una copia nueva.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Colección</h3>
+                            <p>Permite almacenar cualquier tipo de dato (números, textos, booleanos) de forma organizada.</p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Modificación</h2>
+                    <h1>Añadir Elementos</h1>
+                    <p>Existen dos formas principales de hacer crecer una lista:</p>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3 class="text-bold">.append(valor)</h3>
+                            <p class="text-small">Agrega el elemento al <b>final</b> de la lista. Es el método más común.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3 class="text-bold">.insert(i, valor)</h3>
+                            <p class="text-small">Inserta un elemento en la posición <b>específica</b> desplazando el resto.</p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Ejemplo de Adición</h2>
+                    <pre><code class="language-python">
+invitados = ["Ana", "Luis"]
+
+# Al final de la cola
+invitados.append("Marta") 
+# ["Ana", "Luis", "Marta"]
+
+# Colarse en el primer puesto (índice 0)
+invitados.insert(0, "Carlos")
+# ["Carlos", "Ana", "Luis", "Marta"]
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Modificación</h2>
+                    <h1>Eliminar Elementos</h1>
+                    <div class="grid-3">
+                        <div class="cal-card">
+                            <h3 style="font-size: 18px;">.remove(x)</h3>
+                            <p class="text-small">Busca el <b>valor</b> x y lo borra. Falla si no existe.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3 style="font-size: 18px;">.pop()</h3>
+                            <p class="text-small">Elimina y <b>retorna</b> el último elemento de la lista.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3 style="font-size: 18px;">.pop(i)</h3>
+                            <p class="text-small">Elimina el elemento en la posición <b>i</b>.</p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Diferencia de enfoque</h2>
+                    <pre><code class="language-python">
+frutas = ["Manzana", "Pera", "Uva", "Pera"]
+
+# Por valor (borra la primera que encuentra)
+frutas.remove("Pera") 
+# ["Manzana", "Uva", "Pera"]
+
+# Por posición (el segundo elemento)
+eliminado = frutas.pop(1)
+print(eliminado) # Salida: Uva
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Gestión</h2>
+                    <h1>Orden y Utilidad</h1>
+                    <table class="cal-table">
+                        <thead>
+                            <tr>
+                                <th>Método / Función</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>len(lista)</td>
+                                <td>Retorna cuántos elementos hay.</td>
+                            </tr>
+                            <tr>
+                                <td>lista.sort()</td>
+                                <td>Ordena la lista original (in-place).</td>
+                            </tr>
+                            <tr>
+                                <td>sorted(lista)</td>
+                                <td>Crea una <b>copia</b> ordenada sin tocar la original.</td>
+                            </tr>
+                            <tr>
+                                <td>lista.reverse()</td>
+                                <td>Invierte el orden de los elementos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section>
+                    <h2>Búsqueda e Información</h2>
+                    <pre><code class="language-python">
+notas = [10, 7, 9, 8]
+
+print(len(notas))    # Salida: 4
+print(notas.index(9)) # Salida: 2 (¿dónde está el 9?)
+
+# Ordenamiento
+notas.sort() 
+print(notas) # Salida: [7, 8, 9, 10]
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <h2 class="text-muted">Cierre de Sesión</h2>
+                <h1>Errores Fatales</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">ValueError</h3>
+                        <p class="text-small">Ocurre cuando intentas usar <code>.remove()</code> con un valor que no está en la lista.</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">pop de lista vacía</h3>
+                        <p class="text-small">Intentar sacar un elemento de una lista que no tiene nada dará error.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 02: Listas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-image { border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; background: #ffffff; padding: 8px; max-height: 520px; display: block; margin: 0 auto; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 24px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; } .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; font-weight: 600; } .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34,42,53,0.1); font-family: 'Roboto Mono', monospace; text-align: left; } .cal-table td:last-child { font-family: 'Inter', sans-serif; color: #898989; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+            
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Listas
+                    </h1>
+                    
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 02 
+                    </h2>
+
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Introducción a las colecciones de datos: definición, 
+                        acceso posicional y la capacidad de modificar elementos en Python.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2 class="text-muted">Conceptos Fundamentales</h2>
+                    <h1>¿Qué es una Lista?</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Definición</h3>
+                            <p>Es una colección <b>ordenada</b> y <b>mutable</b> de objetos. Permite agrupar múltiples valores bajo un solo nombre de variable.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Analogía</h3>
+                            <p>Imagina un organizador de píldoras o una lista de compras: cada espacio tiene una posición y puedes cambiar lo que hay dentro.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <h2>Creación de Listas</h2>
+                    <p>En Python, usamos corchetes <code class="text-bold">[]</code> para definir una lista y comas para separar los elementos.</p>
+                    <div class="cal-card">
+                        <pre><code class="language-python">
+# Lista de strings (carreras ESPOL)
+carreras = ["Computación", "Artes", "Mecánica"]
+
+# Lista de números (calificaciones)
+notas = [9.5, 8.0, 10.0, 7.5]
+
+# Lista vacía
+mi_lista = []
+                        </code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+    <section>
+        <h2 class="text-muted">¿Cómo ubicar un dato?</h2>
+        <h1>El Sistema de Índices</h1>
+        <div class="cal-card">
+            <p>Imagina la lista como un <b>edificio de un solo piso</b> con varios cuartos:</p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; margin: 40px 0;">
+                <div style="text-align: center;">
+                    <div class="cal-card-compact" style="background: #f8f9fa; border: 2px solid #242424; width: 150px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-family: 'Roboto Mono'; font-weight: 600;">"Python"</span>
+                    </div>
+                    <p class="text-small text-bold" style="margin-top: 10px;">Índice 0</p>
+                    <p class="text-small text-muted">Inicio</p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="cal-card-compact" style="background: #f8f9fa; border: 2px solid #242424; width: 150px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-family: 'Roboto Mono'; font-weight: 600;">"Java"</span>
+                    </div>
+                    <p class="text-small text-bold" style="margin-top: 10px;">Índice 1</p>
+                    <p class="text-small text-muted">+1 Salto</p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="cal-card-compact" style="background: #f8f9fa; border: 2px solid #242424; width: 150px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-family: 'Roboto Mono'; font-weight: 600;">"C++"</span>
+                    </div>
+                    <p class="text-small text-bold" style="margin-top: 10px;">Índice 2</p>
+                    <p class="text-small text-muted">+2 Saltos</p>
+                </div>
+            </div>
+            <p class="text-small">El índice indica <b>cuántos saltos</b> damos desde el principio para llegar al valor.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="text-muted">Diferencia de Perspectiva</h2>
+        <h1>Humano vs. Python</h1>
+        <div class="grid-2">
+            <div class="cal-card">
+                <h3>Mentalidad Humana</h3>
+                <p class="text-muted">"Este es el <b>primer</b> elemento de mi lista de compras".</p>
+                <p class="text-bold" style="font-size: 40px; margin-top: 20px;">Posición: 1</p>
+            </div>
+            <div class="cal-card">
+                <h3>Mentalidad Python</h3>
+                <p class="text-muted">"Este elemento está a <b>cero saltos</b> de distancia del inicio".</p>
+                <p class="text-bold" style="font-size: 40px; margin-top: 20px;">Índice: 0</p>
+            </div>
+        </div>
+        <p style="margin-top: 30px; font-size: 22px;">💡 <b>Regla de Oro:</b> El índice máximo siempre es <code class="text-bold">Largo - 1</code>.</p>
+    </section>
+
+    <section>
+        <h2 class="text-muted">Acceso Inverso</h2>
+        <h1>Índices Negativos</h1>
+        <div class="cal-card">
+            <p>Python permite contar desde el final hacia atrás. Esto es muy útil cuando no sabemos qué tan larga es la lista.</p>
+            <table class="cal-table">
+                <thead>
+                    <tr>
+                        <th>Elemento</th>
+                        <th>"Python"</th>
+                        <th>"Java"</th>
+                        <th>"C++" (Último)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Índice Normal</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><b style="color: #242424;">Índice Negativo</b></td>
+                        <td>-3</td>
+                        <td>-2</td>
+                        <td><b>-1</b></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-small text-muted" style="margin-top: 20px;">Tip: <code class="text-bold">lista[-1]</code> siempre te dará el último elemento, sin importar el tamaño.</p>
+        </div>
+    </section>
+</section>
+
+            <section>
+                <section>
+                    <h2>Código en Acción</h2>
+                    <pre><code class="language-python">
+estudiantes = ["Ana", "Luis", "Marta"]
+
+# Acceder al primer elemento
+print(estudiantes[0])  # Salida: Ana
+
+# Modificar al segundo estudiante
+estudiantes[1] = "Carlos"
+print(estudiantes)     # Salida: ["Ana", "Carlos", "Marta"]
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Reto Mental</h2>
+                    <div class="cal-card">
+                        <h3>¿Qué imprimirá este código?</h3>
+                        <pre><code class="language-python">
+frutas = ["Manzana", "Pera", "Uva"]
+frutas[2] = "Naranja"
+print(frutas[2])
+                        </code></pre>
+                        <p class="text-small text-muted" style="margin-top: 20px;">A) Uva &nbsp;&nbsp; B) Naranja &nbsp;&nbsp; C) Error</p>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <h2 class="text-muted">Cierre de Sesión</h2>
+                <h1>Errores Comunes</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">IndexError</h3>
+                        <p>Tratar de acceder a un índice que no existe (ej. índice 5 en una lista de 3 elementos).</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3>Identación</h3>
+                        <p>Recuerda que el código debe estar alineado correctamente bajo sus estructuras.</p>
+                    </div>
+                </div>
+                
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Cal Sans';
+            src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* --- SISTEMA DE DISEÑO ESTILO CAL.COM --- */
+        .reveal {
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            color: #242424;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: 'Cal Sans', sans-serif;
+            font-weight: 600;
+            color: #242424;
+            text-transform: none;
+            letter-spacing: 0px;
+            margin-bottom: 24px;
+        }
+        
+        .reveal h1 { font-size: 64px; line-height: 1.10; }
+        .reveal h2 { font-size: 48px; line-height: 1.10; }
+        .reveal h3 { font-size: 24px; line-height: 1.30; }
+
+        .reveal p, .reveal li {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 28px;
+            line-height: 1.50;
+            letter-spacing: -0.2px;
+            color: #242424;
+        }
+
+        .text-muted { color: #898989 !important; }
+        .text-small { font-size: 20px !important; }
+        .text-bold { font-weight: 600 !important; color: #111111; }
+
+        .cal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px, 
+                        rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, 
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .cal-image {
+            border-radius: 8px;
+            box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px, 
+                        rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, 
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            background: #ffffff;
+            padding: 8px;
+            max-height: 520px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Código */
+        .reveal pre {
+            background: #242424;
+            border-radius: 8px;
+            box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px, 
+                        rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, 
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            padding: 24px;
+            width: 100%;
+            text-align: left; 
+            box-sizing: border-box;
+            overflow-x: auto; 
+        }
+        .reveal pre code {
+            font-family: 'Roboto Mono', monospace !important; 
+            font-weight: 400; 
+            color: #f8f9fa;
+            font-size: 24px;
+            line-height: 1.5;
+            text-align: left;
+            white-space: pre; 
+            display: block;
+        }
+
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; }
+        .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; }
+        .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; }
+        .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+
+        .cal-card-compact { padding: 20px; margin-bottom: 0; }
+        .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; }
+        .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; }
+        .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; font-weight: 600; }
+        .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34, 42, 53, 0.1); font-family: 'Roboto Mono', monospace; text-align: left; }
+        .cal-table td:last-child { font-family: 'Inter', sans-serif; color: #898989; }
+
+        .reveal .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 24px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #898989;
+            z-index: 1000;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        
+        <div class="slides">
+            
+            <section>
+                <h1>Fundamentos de Programación</h1>
+                <p class="text-muted">Unidad 1: Introducción a Python</p>
+                <div style="margin-top: 80px;">
+                    <p class="text-small text-bold">ESPOL</p>
+                    <p class="text-small text-muted">Msc. Carlos Cedeño</p>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2>El Origen de Python</h2>
+                    <p>Creado por <strong>Guido van Rossum</strong> y lanzado en 1991. Diseñado para ser un lenguaje potente pero extremadamente fácil de leer.</p>
+                    <div class="cal-card" style="margin-top: 40px;">
+                        <p class="text-small" style="margin: 0;"><strong>Dato curioso:</strong> Su nombre no proviene del reptil, sino del grupo cómico británico <em>Monty Python's Flying Circus</em>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>El "Zen" de Python</h2>
+                    <p class="text-muted" style="margin-bottom: 40px;">Principios de diseño que priorizan la claridad sobre la complejidad.</p>
+                    <div class="cal-card">
+                        <p style="font-family: 'Cal Sans', sans-serif; font-size: 32px; line-height: 1.3; margin: 0; color: #111111;">
+                            "Bello es mejor que feo.<br>
+                            Explícito es mejor que implícito.<br>
+                            Simple es mejor que complejo.<br>
+                            La legibilidad cuenta."
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Evolución de los Lenguajes</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">El árbol genealógico de la programación: de dónde venimos y dónde encaja Python.</p>
+                    <img src="https://asset-cdn.tecky.io/2021/10/20/programming_languages_family_trees_uid_616fd206b9de0.png" 
+                         alt="Árbol genealógico de los lenguajes" class="cal-image">
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>¿Por qué programar hoy?</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 40px;">Habilidad transversal para: Artes • Humanidades • Ciencias • Ingenierías</p>
+                    <div class="grid-3">
+                        <div class="cal-card">
+                            <h3>1. Automatizar</h3>
+                            <p>Hacer que la computadora realice tareas repetitivas y aburridas en fracciones de segundo.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>2. Datos</h3>
+                            <p>Procesar y analizar volúmenes masivos de información imposible en Excel tradicional.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>3. Autonomía</h3>
+                            <p>Crear tus propias herramientas de software en lugar de depender de soluciones comerciales.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Python en el Mundo Real</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">Sus usos principales en la industria actual:</p>
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Ciencia de Datos e IA</h3>
+                            <p>Análisis estadístico y desarrollo de modelos de Machine Learning (Pandas, NumPy).</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Automatización</h3>
+                            <p>Manipulación masiva de PDFs, extracción de datos web y envío de correos.</p>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Desarrollo Web</h3>
+                            <p>Infraestructura sólida. Plataformas como Instagram, Spotify y Netflix lo usan.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Integración</h3>
+                            <p>Actúa como "pegamento" tecnológico para conectar múltiples sistemas.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Compilado vs Interpretado</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">¿Cómo entiende la máquina nuestro código?</p>
+                    <img src="https://miro.medium.com/1*gdjRHxObwCQyymI8w6hnsg.png" alt="Compilador vs Intérprete" class="cal-image" style="max-height: 250px;">
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Compilador (Ej. C++)</h3>
+                            <p>Traduce todo el bloque antes de ejecutar. Más rápido en ejecución, más lento de probar.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Intérprete (Ej. Python)</h3>
+                            <p>Traduce y ejecuta línea por línea. Más amigable y rápido para desarrollo iterativo.</p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>El Flujo de Programación</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">La interacción entre la realidad y la máquina.</p>
+                    <img src="https://camo.githubusercontent.com/7d88f79b98fbf06ce65e0b78da45d79625b9e84535a8e5f13e78a4581b6e6f46/68747470733a2f2f756e6976657273696461642d64652d6c6f732d616e6465732e676974626f6f6b732e696f2f66756e64616d656e746f732d64652d70726f6772616d6163696f6e2f636f6e74656e742f4e6976656c312f696d672f466967312d312e6a7067" 
+                         alt="Interacción usuario y computadora" class="cal-image">
+                    <p class="text-small text-muted" style="margin-top: 16px; font-weight: 500;">Figura 1: El programa como intermediario</p>
+                </section>
+
+                <section>
+                    <h2>De la Idea al Algoritmo</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">Antes de escribir código, estructuramos la lógica.</p>
+                    <img src="https://camo.githubusercontent.com/2f035b4c66e7097edea9c34efec2771424d5bf736b138e098ce6b5eff14d01e8/68747470733a2f2f756e6976657273696461642d64652d6c6f732d616e6465732e676974626f6f6b732e696f2f66756e64616d656e746f732d64652d70726f6772616d6163696f6e2f636f6e74656e742f4e6976656c312f696d672f466967312d332e6a7067" 
+                         alt="Proceso de abstracción" class="cal-image">
+                    <p class="text-small text-muted" style="margin-top: 16px; font-weight: 500;">Figura 2: Modelado de la solución</p>
+                </section>
+
+                <section>
+                    <h2>Entrada, Proceso y Salida</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">El ciclo fundamental de la computación.</p>
+                    <img src="https://camo.githubusercontent.com/62c30475654772ed9843dcefad542ae815f95ddf6cb53eff7a1333455faae008/68747470733a2f2f756e6976657273696461642d64652d6c6f732d616e6465732e676974626f6f6b732e696f2f66756e64616d656e746f732d64652d70726f6772616d6163696f6e2f636f6e74656e742f4e6976656c312f696d672f466967312d35622e6a7067" 
+                         alt="Ciclo de ejecución" class="cal-image">
+                    <p class="text-small text-muted" style="margin-top: 16px; font-weight: 500;">Figura 3: El flujo constante de información</p>
+                </section>
+            </section>
+
+            <section>
+                <h2>¿Dónde escribiremos código?</h2>
+                <p class="text-muted text-small" style="margin-bottom: 40px;">No necesitas comprar una súper computadora, usaremos la nube:</p>
+                
+                <div class="grid-3">
+                    <div class="cal-card" style="box-shadow: rgba(34, 42, 53, 0.15) 0px 0px 0px 2px, rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;">
+                        <h3 style="color: #111111;">1. Online-Python</h3>
+                        <p><strong>(Inicio del Curso)</strong><br>Sitio web rápido (online-python.com). No requiere cuenta. Perfecto para lo básico.</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3>2. Google Colab</h3>
+                        <p><strong>(Segundo Parcial)</strong><br>Cuadernos en la nube de Google. Mezcla texto explicativo con código. Ideal para Datos.</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3>3. IDEs Profesionales</h3>
+                        <p><strong>(Avanzado)</strong><br>Programas como PyCharm o VS Code instalados localmente para sistemas grandes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2>¿Cómo le hablamos a Python?</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 40px;">Tenemos dos formas principales de trabajar:</p>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>1. Modo Interactivo (REPL)</h3>
+                            <p>Escribimos una línea de código y Python responde de inmediato. Perfecto para probar ideas rápidamente.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>2. Scripts (Archivos)</h3>
+                            <p>Escribimos todas las instrucciones en un archivo de texto (.py) y le decimos a Python que las ejecute de golpe.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Python: Una Calculadora Gigante</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 20px;">Modo interactivo: Operadores aritméticos básicos.</p>
+                    <table class="cal-table">
+                        <tr><th>Operador</th><th>Operación</th><th>Ejemplo</th><th>Resultado</th></tr>
+                        <tr><td>+</td><td>Suma</td><td>2 + 2</td><td>4</td></tr>
+                        <tr><td>-</td><td>Resta</td><td>5 - 2</td><td>3</td></tr>
+                        <tr><td>*</td><td>Multiplicación</td><td>3 * 3</td><td>9</td></tr>
+                        <tr><td>/</td><td>División real</td><td>22 / 8</td><td>2.75</td></tr>
+                        <tr><td>//</td><td>División entera</td><td>22 // 8</td><td>2</td></tr>
+                        <tr><td>%</td><td>Módulo (Residuo)</td><td>22 % 8</td><td>6</td></tr>
+                        <tr><td>**</td><td>Exponente</td><td>2 ** 3</td><td>8</td></tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>Orden de Operaciones</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 40px;">Paréntesis, Exponentes, Multiplicación, Suma.</p>
+                    <pre><code>>>> 2 + 3 * 6
+20
+
+>>> (2 + 3) * 6
+30</code></pre>
+                    <p class="text-small" style="margin-top: 40px;"><em>Ejercicio para clase:</em> ¿Qué resultado arrojaría <code>(5 - 1) * ((7 + 1) / 2)</code>?</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Los Errores son Normales</h2>
+                    <p>Al aprender un nuevo idioma, es común equivocarse. En Python, eso genera un <strong>SyntaxError</strong>.</p>
+                    <div class="cal-card" style="margin-top: 40px;">
+                        <p class="text-small" style="margin: 0;"><strong>Importante:</strong> Un error no romperá tu computadora. Solo significa que Python no entendió la instrucción y te pide corregirla.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Nuestro Primer Script</h2>
+                    <p class="text-muted" style="margin-bottom: 40px;">Ve a <strong>online-python.com</strong> y escribe:</p>
+                    <pre><code># Esto es un comentario, la computadora lo ignora
+print("¡Hola, ESPOL!")</code></pre>
+                    <p class="text-small" style="margin-top: 40px;">La instrucción <strong>print()</strong> envía información a la pantalla (Output).</p>
+                </section>
+
+                <section>
+                    <h2>Siguiente Unidad</h2>
+                    <p class="text-muted">Variables y Tipos de Datos</p>
+                    <div class="cal-card" style="margin-top: 40px;">
+                        <p class="text-small" style="margin: 0;">Descubriremos cómo usar la memoria de la computadora para guardar nuestra información.</p>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+    </script>
+</body>
+</html>
