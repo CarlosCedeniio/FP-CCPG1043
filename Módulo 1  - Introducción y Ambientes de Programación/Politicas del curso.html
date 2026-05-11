@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Políticas del Curso - Fundamentos de Programación</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Cal Sans';
+            src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .reveal {
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            color: #242424;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: 'Cal Sans', sans-serif;
+            font-weight: 600;
+            color: #242424;
+            text-transform: none;
+            letter-spacing: 0px;
+            margin-bottom: 24px;
+        }
+
+        .reveal h1 { font-size: 64px; line-height: 1.10; }
+        .reveal h2 { font-size: 48px; line-height: 1.10; }
+        .reveal h3 { font-size: 24px; line-height: 1.30; }
+
+        .reveal p, .reveal li {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 28px;
+            line-height: 1.50;
+            letter-spacing: -0.2px;
+            color: #242424;
+        }
+
+        .reveal ul { list-style: none; padding: 0; margin: 0; }
+        .reveal ul li::before {
+            content: "—";
+            color: #898989;
+            margin-right: 12px;
+            font-weight: 400;
+        }
+
+        .text-muted { color: #898989 !important; }
+        .text-small { font-size: 20px !important; }
+        .text-bold { font-weight: 600 !important; color: #111111; }
+
+        .cal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px,
+                        rgba(34, 42, 53, 0.08) 0px 0px 0px 1px,
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .cal-card-warning {
+            background: #fffbeb;
+            border-radius: 12px;
+            box-shadow: rgba(234, 179, 8, 0.3) 0px 0px 0px 1px,
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            padding: 24px;
+        }
+
+        .cal-image {
+            border-radius: 8px;
+            box-shadow: rgba(19, 19, 22, 0.7) 0px 1px 5px -4px,
+                        rgba(34, 42, 53, 0.08) 0px 0px 0px 1px,
+                        rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;
+            background: #ffffff;
+            padding: 8px;
+            max-height: 480px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 32px; }
+        .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 32px; }
+        .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; }
+        .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; line-height: 1.5; }
+
+        .cal-card-compact { padding: 20px; margin-bottom: 0; }
+        .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; }
+        .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+
+        .badge {
+            display: inline-block;
+            background: #f4f4f5;
+            border-radius: 6px;
+            padding: 2px 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #242424;
+            margin: 4px 4px 4px 0;
+        }
+
+        .reveal .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 24px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #898989;
+            z-index: 1000;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section>
+                <h1>Fundamentos de<br>Programación</h1>
+                <p class="text-muted">2026 PAO I — Políticas del Curso</p>
+                <div style="margin-top: 80px;">
+                    <p class="text-small text-bold">ESPOL</p>
+                    <p class="text-small text-muted">Msc. Carlos Cedeño</p>
+                </div>
+            </section>
+
+            <!-- INFORMACIÓN PERSONAL -->
+            <section>
+                <h2>Información Personal</h2>
+                <div class="cal-card" style="margin-top: 40px; text-align: left;">
+                    <ul style="line-height: 2;">
+                        <li><span class="text-bold">Ingeniero en Telemática</span></li>
+                        <li><span class="text-bold">Máster en Data Science</span></li>
+                        <li>Docente e investigador @ ESPOL / CTI</li>
+                        <li>CTO @ Forward Consulting</li>
+                        <li>AWS Academy Educator</li>
+                        <li>Account Manager — GoodAI LLC.</li>
+                        <li>~6 años de experiencia como Senior Dev</li>
+                        <li>SmartX Journal Club Founder</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- INFORMACIÓN DE CONTACTO -->
+            <section>
+                <h2>Contacto</h2>
+                <div class="grid-3" style="margin-top: 40px;">
+                    <div class="cal-card" style="box-shadow: rgba(34, 42, 53, 0.15) 0px 0px 0px 2px, rgba(34, 42, 53, 0.05) 0px 4px 8px 0px;">
+                        <h3>Email</h3>
+                        <p>caencede@espol.edu.ec</p>
+                        <p style="font-size: 14px; color: #898989; margin-top: 8px;">Medio de contacto formal</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3>Oficina</h3>
+                        <p>11F — 115</p>
+                        <p style="font-size: 14px; color: #898989; margin-top: 8px;">Previa planificación</p>
+                    </div>
+                    <div class="cal-card">
+                        <h3>AV</h3>
+                        <p>No disponible</p>
+                        <p style="font-size: 14px; color: #898989; margin-top: 8px;">Preferible no escribir por AV</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CALIFICACIONES -->
+            <section>
+                <h2>Calificaciones</h2>
+                <img src="ponderacion.png" alt="Ponderación del curso" class="cal-image" style="margin-top: 32px;">
+            </section>
+
+            <!-- POLÍTICAS GENERALES -->
+            <section>
+
+                <section>
+                    <h2>Políticas Generales</h2>
+                    <div class="grid-2" style="margin-top: 40px;">
+                        <div class="cal-card">
+                            <h3>Puntualidad</h3>
+                            <p>Presentarse con <strong>5 minutos de anticipación</strong> en actividades evaluadas. No se otorgará tiempo adicional por llegada tardía sin justificación.</p>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Celulares</h3>
+                            <p>No se permite el uso de celulares durante la clase. Colocar en modo <strong>silencio</strong> y desactivar alarmas.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Asistencia</h2>
+                    <p class="text-muted text-small" style="margin-bottom: 32px;">Reglamento de Grado ESPOL</p>
+                    <div class="cal-card" style="text-align: left;">
+                        <p>La asistencia será controlada para efectos de reprobación. El estudiante debe rendir evaluaciones, exámenes, talleres y lecciones en las fechas establecidas.</p>
+                    </div>
+                    <div class="cal-card-warning" style="text-align: left; margin-top: 20px;">
+                        <p style="margin: 0;"><strong>Reprobación automática</strong> con el <strong>40% de faltas</strong>, según el Reglamento de Grado de ESPOL.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Atrasos y Evaluaciones</h2>
+                    <div class="grid-2" style="margin-top: 32px;">
+                        <div class="cal-card">
+                            <h3>Atrasos</h3>
+                            <p>La clase inicia <strong>10 minutos después</strong> de la hora oficial (ej. 07h10). Si llegas tarde, espera a que finalice la clase para registrar el atraso.</p>
+                            <div style="margin-top: 16px;">
+                                <span class="badge">3 atrasos = 1 falta</span>
+                            </div>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Evaluaciones</h3>
+                            <p>Fechas publicadas desde el <strong>día 1</strong> de clase. Empiezan puntual. No habrá extensiones de tiempo.</p>
+                            <p style="font-size: 16px; color: #898989; margin-top: 12px;">Verificar el aula del examen con anterioridad.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </section>
+
+            <!-- USO DE LLMs -->
+            <section>
+                <section>
+                    <h2>Sobre el uso de LLMs</h2>
+                    <div class="cal-card" style="margin-top: 40px; text-align: left;">
+                        <p>A partir de este semestre se regulará el uso de asistentes de programación con <strong>restricciones</strong>. Las indicaciones específicas se darán en las siguientes clases.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Integridad Académica</h2>
+                    <div class="cal-card-warning" style="text-align: left; margin-top: 40px;">
+                        <p style="margin: 0; font-size: 24px; line-height: 1.6;">
+                            Cualquier <strong>uso indebido</strong> de herramientas de programación, no seguir las indicaciones en actividades que sí las permiten, y el <strong>plagio</strong> en deberes, talleres, lecciones y exámenes será penalizado con la <strong>anulación del trabajo</strong> y sujeto a reporte frente al <strong>consejo de disciplina</strong>.
+                        </p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- RECURSOS -->
+            <section>
+                <h2>Recursos</h2>
+                <div class="grid-2" style="margin-top: 32px;">
+                    <div class="cal-card cal-card-compact">
+                        <h3>Página de la Materia</h3>
+                        <p><a href="http://programacion.espol.edu.ec/" target="_blank" style="color: #111111;">programacion.espol.edu.ec</a></p>
+                    </div>
+                    <div class="cal-card cal-card-compact">
+                        <h3>Ejercicios y Exámenes</h3>
+                        <p><a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank" style="color: #111111;">blog.espol.edu.ec/ccpg1001</a></p>
+                    </div>
+                </div>
+                <div class="grid-2" style="margin-top: 0;">
+                    <div class="cal-card cal-card-compact">
+                        <h3>Python3 — Univ. Valencia</h3>
+                        <p><a href="https://www.mclibre.org/consultar/python/" target="_blank" style="color: #111111;">mclibre.org/consultar/python</a></p>
+                    </div>
+                    <div class="cal-card cal-card-compact">
+                        <h3>Curso Python3 — Código Facilito</h3>
+                        <p><a href="https://www.youtube.com/playlist?list=PLagErt3C7iltgifmiGFQFI1GhUAKQvvyb" target="_blank" style="color: #111111;">Ver en YouTube</a></p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+    </script>
+</body>
+</html>

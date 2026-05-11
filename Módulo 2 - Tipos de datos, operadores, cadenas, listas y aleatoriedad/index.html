@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2 — Tipos de datos, Cadenas, Listas y Aleatoriedad · CCPG1043</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:                   #201d1d;
+            --ink-deep:              #0f0000;
+            --canvas:                #fdfcfc;
+            --surface-soft:          #f8f7f7;
+            --surface-card:          #f1eeee;
+            --hairline:              rgba(15,0,0,0.12);
+            --hairline-strong:       #646262;
+            --body:                  #424245;
+            --mute:                  #646262;
+            --ash:                   #9a9898;
+            --on-dark:               #fdfcfc;
+            --font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace,
+                    'SFMono-Regular', Menlo, Monaco, Consolas,
+                    'Liberation Mono', 'Courier New', monospace;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Container ──────────────────────────────── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Nav ────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--canvas);
+            border-bottom: 1px solid var(--hairline);
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            width: 100%;
+        }
+
+        .nav-wordmark {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* ── Buttons ────────────────────────────────── */
+        .btn-primary {
+            background: var(--ink);
+            color: var(--canvas) !important;
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            padding: 4px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none !important;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .btn-primary:active { background: var(--ink-deep); }
+
+        /* ── Page Header ─────────────────────────────── */
+        .page-header {
+            padding: 64px 0 56px;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--mute);
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--ink);
+            max-width: 680px;
+            margin-bottom: 20px;
+        }
+
+        .section-body {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--body);
+            max-width: 680px;
+        }
+
+        /* ── Sections ───────────────────────────────── */
+        .section {
+            padding: 64px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .section-rule {
+            border: none;
+            border-top: 1px solid var(--hairline);
+            margin-bottom: 32px;
+        }
+
+        /* ── List rows ──────────────────────────────── */
+        .list-rows { margin-top: 0; }
+
+        .list-row {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--body);
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+        }
+
+        .list-row:last-child { border-bottom: none; }
+
+        .list-marker {
+            color: var(--ink);
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+
+        .list-label {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        /* ── Module rows (clickable) ────────────────── */
+        a.module-row {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.module-row:last-child { border-bottom: none; }
+        a.module-row:hover .list-label { text-decoration: underline; }
+
+        /* ── Shortcuts ──────────────────────────────── */
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .shortcut-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .shortcut-sublabel {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+        }
+
+        .code-block {
+            background: var(--surface-soft);
+            border: 1px solid var(--hairline);
+            padding: 14px 18px;
+            font-size: 13px;
+            font-family: var(--font);
+            color: var(--body);
+            overflow-x: auto;
+            line-height: 1.7;
+            white-space: pre;
+        }
+
+        /* ── Links ──────────────────────────────────── */
+        a.link-inline {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        /* ── Footer ─────────────────────────────────── */
+        .footer { padding: 32px 0; }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+            border: 1px solid var(--hairline);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .footer-links li {
+            flex: 1;
+            border-right: 1px solid var(--hairline);
+        }
+
+        .footer-links li:last-child { border-right: none; }
+
+        .footer-links a {
+            display: block;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 2;
+            color: var(--mute);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover { color: var(--ink); text-decoration: underline; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            line-height: 2;
+            color: var(--mute);
+        }
+
+        /* ── Responsive ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-title { font-size: 22px; }
+            .page-header, .section { padding: 40px 0; }
+            .shortcut-grid { grid-template-columns: 1fr; }
+            .module-row, a.module-row, .list-row { align-items: flex-start; }
+            .list-label { display: block; }
+            .footer-links { flex-wrap: wrap; }
+            .footer-links li { flex: 1 1 50%; }
+            .footer-bottom { flex-direction: column; gap: 0; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .page-title { font-size: 20px; }
+            .code-block { font-size: 12px; }
+            .footer-links li { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVIGATION ───────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="../" class="nav-wordmark">CCPG1043</a>
+                <ul class="nav-links">
+                    <li><a href="#contenido">Contenido</a></li>
+                    <li><a href="#shortcuts">Shortcuts</a></li>
+                    <li><a href="#recursos">Recursos</a></li>
+                </ul>
+                <a href="mailto:caencede@espol.edu.ec" class="btn-primary">Contacto →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── PAGE HEADER ──────────────────────────────── -->
+    <div class="page-header">
+        <div class="container">
+            <p class="breadcrumb">
+                <a href="../" class="link-inline" style="color:var(--mute);text-decoration:none;">CCPG1043</a>
+                &nbsp;/&nbsp;Módulo 2
+            </p>
+            <h1 class="page-title">Módulo 2 — Tipos de datos, Cadenas, Listas y Aleatoriedad</h1>
+            <p class="section-body">
+                Este módulo cubre los tipos de datos fundamentales en Python, el uso de operadores aritméticos y lógicos,
+                la manipulación de cadenas de texto con f-strings y métodos de string, el manejo de listas,
+                búsquedas dentro de ellas, y la generación de valores aleatorios.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── CONTENIDO ────────────────────────────────── -->
+    <section class="section" id="contenido">
+        <div class="container">
+            <p class="section-label">Contenido</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <a href="2.1%20Variables%20y%20tipos%20de%20datos.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.1 Variables y tipos de datos</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Declaración de variables, tipos primitivos (int, float, str, bool) y conversión de tipos</span>
+                    </span>
+                </a>
+                <a href="2.2%20f-strings.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.2 f-strings</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Interpolación de variables en cadenas usando f-strings y formato de salida</span>
+                    </span>
+                </a>
+                <a href="2.3%20Manipulaci%C3%B3n%20de%20Strings.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.3 Manipulación de Strings</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Métodos de strings: upper, lower, strip, split, replace, indexación y slicing</span>
+                    </span>
+                </a>
+                <a href="2.4%20Listas.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.4 Listas</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Creación, acceso, modificación y operaciones básicas con listas</span>
+                    </span>
+                </a>
+                <a href="2.5%20Metodos%20en%20Listas.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.5 Métodos en Listas</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Métodos de listas: append, remove, sort, pop, insert, entre otros</span>
+                    </span>
+                </a>
+                <a href="2.6%20Busquedas%20en%20listas.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.6 Búsquedas en listas</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Búsqueda de elementos con in, index, y recorrido con bucles</span>
+                    </span>
+                </a>
+                <a href="2.7%20Aleatoriedad.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">2.7 Aleatoriedad</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Uso del módulo random: random(), randint(), choice(), shuffle()</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SHORTCUTS ────────────────────────────────── -->
+    <section class="section" id="shortcuts">
+        <div class="container">
+            <p class="section-label">Shortcuts de Python útiles en este módulo</p>
+            <hr class="section-rule">
+            <div class="shortcut-grid">
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Tipos de datos</p>
+                    <pre class="code-block"># Conversión de tipos
+int("42")        # str → int
+float("3.14")    # str → float
+str(100)         # int → str
+bool(0)          # 0, "", [], None → False
+
+# Verificar tipo
+type(variable)
+isinstance(x, int)</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Operadores</p>
+                    <pre class="code-block"># Aritméticos
++  -  *  /    # suma, resta, mult., división (float)
+//            # división entera
+%             # módulo (resto)
+**            # potencia
+
+# Comparación
+==  !=  &lt;  &gt;  &lt;=  &gt;=
+
+# Lógicos
+and  or  not</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">f-strings</p>
+                    <pre class="code-block">nombre = "Ana"
+edad = 20
+print(f"Hola, {nombre}. Tienes {edad} años.")
+
+# Formato numérico
+pi = 3.14159
+print(f"{pi:.2f}")        # → 3.14
+print(f"{1000:,}")        # → 1,000
+print(f"{0.75:.0%}")      # → 75%</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Strings</p>
+                    <pre class="code-block">s = "  Hola Mundo  "
+
+s.upper()          # → "  HOLA MUNDO  "
+s.lower()          # → "  hola mundo  "
+s.strip()          # → "Hola Mundo"
+s.replace("Hola", "Adiós")
+s.split(" ")       # → lista de palabras
+s.startswith("H")
+s.endswith("o")
+len(s)
+
+# Indexación y slicing
+s[0]       # primer carácter
+s[-1]      # último carácter
+s[1:4]     # índice 1 al 3
+s[::-1]    # string invertido</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Listas</p>
+                    <pre class="code-block">lista = [1, 2, 3, 4, 5]
+
+lista.append(6)        # agregar al final
+lista.insert(0, 0)     # insertar en posición
+lista.remove(3)        # eliminar por valor
+lista.pop()            # eliminar y retornar el último
+lista.pop(i)           # eliminar en posición i
+lista.sort()           # ordenar in-place
+sorted(lista)          # retorna nueva lista ordenada
+lista.reverse()
+lista.index(2)         # índice del valor 2
+len(lista)
+
+# Slicing
+lista[1:3]     # sublista del índice 1 al 2
+lista[::-1]    # lista invertida</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Búsquedas en listas</p>
+                    <pre class="code-block">lista = ["a", "b", "c"]
+
+"a" in lista           # True
+"z" not in lista       # True
+lista.index("b")       # → 1
+lista.count("a")       # → 1
+
+# Recorrer con índice
+for i, v in enumerate(lista):
+    print(i, v)</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Aleatoriedad</p>
+                    <pre class="code-block">import random
+
+random.random()            # float en [0.0, 1.0)
+random.randint(1, 10)      # int entre 1 y 10 (inclusive)
+random.choice(lista)       # elemento aleatorio de lista
+random.choices(lista, k=3) # k elementos con reemplazo
+random.sample(lista, k=2)  # k elementos sin reemplazo
+random.shuffle(lista)      # mezcla la lista in-place
+random.seed(42)            # fijar semilla</pre>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── RECURSOS ─────────────────────────────────── -->
+    <section class="section" id="recursos">
+        <div class="container">
+            <p class="section-label">Recursos adicionales</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://programacion.espol.edu.ec/" target="_blank" class="link-inline">Página oficial de la materia</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank" class="link-inline">Ejercicios y exámenes resueltos</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank" class="link-inline">Documentación Python — Tipos built-in</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://docs.python.org/3/library/random.html" target="_blank" class="link-inline">Documentación Python — Módulo random</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://cs50.harvard.edu/python/weeks/0/" target="_blank" class="link-inline">CS50 Python — Harvard</a>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Muy recomendado</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ───────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="http://programacion.espol.edu.ec/" target="_blank">Página del Curso</a></li>
+                <li><a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank">Ejercicios Resueltos</a></li>
+                <li><a href="https://docs.python.org/3/library/stdtypes.html" target="_blank">Docs · Tipos</a></li>
+                <li><a href="https://docs.python.org/3/library/random.html" target="_blank">Docs · random</a></li>
+                <li><a href="https://cs50.harvard.edu/python/weeks/0/" target="_blank">CS50 Python</a></li>
+            </ul>
+            <div class="footer-bottom">
+                <span>©2026 Carlos Cedeño · ESPOL · CCPG1043</span>
+                <span>
+                    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+                       class="link-inline"
+                       style="color:var(--mute)"
+                       target="_blank">CC BY-NC-SA 4.0</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

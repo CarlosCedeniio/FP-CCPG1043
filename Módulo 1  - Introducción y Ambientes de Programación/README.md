@@ -6,7 +6,7 @@ Este módulo cubre los conceptos fundamentales para iniciarse en la programació
 
 | Archivo | Descripción |
 |---------|-------------|
-| [Políticas del curso](Políticas%20del%20curso.md) | Información general del curso, políticas de asistencia, calificaciones y uso de LLMs |
+| [Políticas del curso](Politicas%20del%20curso.html) | Información general del curso, políticas de asistencia, calificaciones y uso de LLMs |
 | [1.1 Introducción a Python](1.1%20Introducción%20a%20python.html) | Introducción al lenguaje Python: historia, características y primeros pasos |
 | [1.2 Conceptos esenciales](1.2%20Conceptos%20esenciales.html) | Conceptos esenciales de programación: variables, expresiones, instrucciones y flujo de ejecución |
 
