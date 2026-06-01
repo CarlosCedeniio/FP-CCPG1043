@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 03: Introducción a las Funciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Introducción a las Funciones
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 03
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Qué son las funciones, cómo se definen y por qué son la herramienta
+                        más importante para organizar y reutilizar código.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: ¿POR QUÉ FUNCIONES? -->
+            <section>
+                <section>
+                    <h2 class="text-muted">El Problema</h2>
+                    <h1>Código que se Repite</h1>
+                    <p style="margin-bottom: 16px;">Imagina que tienes que calcular el área de tres rectángulos distintos:</p>
+                    <pre><code class="language-python" style="font-size: 16px;">largo1 = 5
+ancho1 = 3
+area1 = largo1 * ancho1
+print(f"Área 1: {area1}")
+
+largo2 = 8
+ancho2 = 4
+area2 = largo2 * ancho2
+print(f"Área 2: {area2}")
+
+largo3 = 2
+ancho3 = 7
+area3 = largo3 * ancho3
+print(f"Área 3: {area3}")</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">La Solución</h2>
+                    <h1>El Principio DRY</h1>
+                    <div class="cal-card">
+                        <p style="font-family: 'Cal Sans', sans-serif; font-size: 28px; line-height: 1.3; margin: 0; color: #111111;">
+                            "Don't Repeat Yourself"<br>
+                            <span class="text-muted" style="font-size: 20px; font-family: 'Inter', sans-serif; font-weight: 300;">No te repitas a ti mismo</span>
+                        </p>
+                    </div>
+                    <div class="grid-2" style="margin-top: 24px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Sin funciones</h3>
+                            <p>Si la fórmula cambia, debes corregirla en 3, 10 o 100 lugares distintos.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Con funciones</h3>
+                            <p>La lógica vive en un solo lugar. Corriges una vez, funciona en todas partes.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">La Solución</h2>
+                    <h1>El Mismo Problema, Resuelto</h1>
+                    <pre><code class="language-python">def calcular_area(largo, ancho):
+    return largo * ancho
+
+print(f"Área 1: {calcular_area(5, 3)}")
+print(f"Área 2: {calcular_area(8, 4)}")
+print(f"Área 3: {calcular_area(2, 7)}")</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">La lógica (<code class="text-bold">largo * ancho</code>) existe en <b>un solo lugar</b>. El código es más corto, más claro y más fácil de mantener.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: ANATOMÍA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">La Estructura</h2>
+                    <h1>Anatomía de una Función</h1>
+                    <div class="cal-card">
+                        <pre><code class="language-python">def calcular_area(largo, ancho):
+    """Calcula el área de un rectángulo."""
+    resultado = largo * ancho
+    return resultado</code></pre>
+                        <div class="grid-3" style="margin-top: 24px;">
+                            <div>
+                                <h3 style="font-size: 18px;">1. <code class="text-bold">def</code></h3>
+                                <p class="text-small text-muted">Palabra clave que le dice a Python: "voy a definir una función".</p>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 18px;">2. Nombre</h3>
+                                <p class="text-small text-muted">Identificador de la función. Usa <code>snake_case</code> y verbos de acción.</p>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 18px;">3. Parámetros</h3>
+                                <p class="text-small text-muted">Variables de entrada entre paréntesis. Reciben los datos que necesita la función.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">La Estructura</h2>
+                    <h1>Cuerpo y Retorno</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>El Cuerpo</h3>
+                            <p class="text-small">Todo el código con <b>4 espacios de indentación</b>. Es la lógica que se ejecuta cuando se llama la función.</p>
+                            <pre style="margin-top: 16px; font-size: 14px;"><code class="language-python">def mi_funcion():
+    # ← este espacio
+    # es el cuerpo
+    x = 10</code></pre>
+                        </div>
+                        <div class="cal-card">
+                            <h3>El <code class="text-bold">return</code></h3>
+                            <p class="text-small">Entrega el resultado al código que llamó la función. <b>Termina la ejecución</b> de la función inmediatamente.</p>
+                            <pre style="margin-top: 16px; font-size: 14px;"><code class="language-python">def doblar(n):
+    return n * 2
+    # nada aquí
+    # se ejecuta</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: INVOCAR -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Definir vs. Llamar</h2>
+                    <h1>Invocando una Función</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Definir</h3>
+                            <p class="text-small">Escribir la función. La computadora la <b>registra en memoria</b> pero <b>no la ejecuta</b>. Es como guardar una receta.</p>
+                            <pre style="margin-top: 16px; font-size: 14px;"><code class="language-python">def saludar(nombre):
+    print(f"Hola, {nombre}!")
+# Esto no imprime nada aún</code></pre>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Llamar (Invocar)</h3>
+                            <p class="text-small">Ejecutar la función escribiendo su nombre con paréntesis. Es como <b>seguir la receta</b> para cocinar.</p>
+                            <pre style="margin-top: 16px; font-size: 14px;"><code class="language-python">saludar("Ana")
+# Salida: Hola, Ana!
+saludar("Luis")
+# Salida: Hola, Luis!</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Capturar el Resultado</h2>
+                    <h1>Usar el Valor Retornado</h1>
+                    <pre><code class="language-python">def calcular_area(largo, ancho):
+    return largo * ancho
+
+# Opción 1: Guardar el resultado en una variable
+area = calcular_area(5, 3)
+print(area)              # 15
+
+# Opción 2: Usar el resultado directamente
+print(calcular_area(8, 4))  # 32
+
+# Opción 3: Usar el resultado en una expresión
+total = calcular_area(2, 7) + calcular_area(3, 3)
+print(total)             # 23</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: NONE -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Un Detalle Importante</h2>
+                    <h1>Funciones Sin <code class="text-bold" style="font-size: 56px;">return</code></h1>
+                    <div class="cal-card">
+                        <p>No toda función necesita devolver un valor. Cuando una función solo <b>realiza una acción</b> (como imprimir) y no tiene <code class="text-bold">return</code>, Python retorna automáticamente el valor especial <code class="text-bold">None</code>.</p>
+                    </div>
+                    <pre style="margin-top: 24px;"><code class="language-python">def mostrar_bienvenida(nombre):
+    print(f"Bienvenido al sistema, {nombre}!")
+
+resultado = mostrar_bienvenida("Carlos")
+print(resultado)  # None</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Procedimiento vs. Función</h2>
+                    <h1>¿Cuándo usar cada uno?</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Sin retorno (Procedimiento)</h3>
+                            <p class="text-small">Cuando la función existe para <b>producir un efecto</b>: imprimir algo en pantalla, modificar una lista, etc.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def imprimir_factura(total):
+    print(f"Total: ${total}")</code></pre>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Con retorno (Función)</h3>
+                            <p class="text-small">Cuando la función existe para <b>calcular y entregar</b> un resultado que necesitaremos usar más adelante.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def calcular_iva(precio):
+    return precio * 0.15</code></pre>
+                        </div>
+                    </div>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small"><b>Trampa común:</b> Nunca hagas <code style="color: #d32f2f;">x = print("algo")</code>. <code>print()</code> no retorna nada útil — su trabajo es mostrar, no calcular.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: DOCSTRINGS -->
+            <section>
+                <h2 class="text-muted">Buenas Prácticas</h2>
+                <h1>Documentar con Docstrings</h1>
+                <div class="cal-card">
+                    <p>Un <b>docstring</b> es una cadena de texto entre <code class="text-bold">"""triple comillas"""</code> ubicada justo después de la definición de la función. Describe qué hace, qué recibe y qué retorna.</p>
+                    <pre style="margin-top: 20px;"><code class="language-python">def calcular_imc(peso, altura):
+    """
+    Calcula el Índice de Masa Corporal.
+    peso: peso en kilogramos (float)
+    altura: altura en metros (float)
+    Retorna el IMC como número decimal.
+    """
+    return peso / (altura ** 2)</code></pre>
+                </div>
+                <div class="cal-card" style="margin-top: 0;">
+                    <p class="text-small">Puedes leer el docstring de cualquier función con <code class="text-bold">help(calcular_imc)</code>. Es el mismo sistema que usa Python internamente para documentar <code>print()</code>, <code>len()</code>, etc.</p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: CONVENCIONES -->
+            <section>
+                <h2 class="text-muted">Nombramiento</h2>
+                <h1>Convenciones para Funciones</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3>Usa <code>snake_case</code></h3>
+                        <p class="text-small">Todo en minúsculas, palabras separadas por guion bajo. Es el estándar de Python (PEP 8).</p>
+                        <pre style="margin-top: 12px; font-size: 14px;"><code class="language-python"># Correcto
+def calcular_promedio():
+    ...
+
+# Incorrecto
+def CalcularPromedio():
+    ...</code></pre>
+                    </div>
+                    <div class="cal-card">
+                        <h3>Usa verbos de acción</h3>
+                        <p class="text-small">El nombre debe describir <b>qué hace</b> la función, no qué es. Prefijos comunes:</p>
+                        <ul style="font-size: 18px; margin-top: 12px; padding-left: 20px;">
+                            <li><code>calcular_</code> → procesa y retorna un número</li>
+                            <li><code>obtener_</code> → busca y retorna un dato</li>
+                            <li><code>mostrar_</code> → imprime en pantalla</li>
+                            <li><code>verificar_</code> → comprueba una condición</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: EJERCICIOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 1: Saludo Personalizado</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">saludar(nombre)</code> que reciba el nombre de una persona e imprima un mensaje de bienvenida.</p>
+                        <p style="margin-top: 20px;">Luego llama la función con <b>3 nombres distintos</b>.</p>
+                    </div>
+                    <pre><code class="language-python"># Ejemplo de salida esperada:
+# Hola, Ana! Bienvenida a ESPOL.
+# Hola, Luis! Bienvenido a ESPOL.
+# Hola, Marta! Bienvenida a ESPOL.</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 2: Área del Cuadrado</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">area_cuadrado(lado)</code> que reciba la medida de un lado y <b>retorne</b> el área del cuadrado.</p>
+                        <p style="margin-top: 20px;">Muestra el resultado para lados de 4, 7 y 12 unidades.</p>
+                    </div>
+                    <pre><code class="language-python"># Hint:
+# area = lado * lado
+# O también: lado ** 2</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 3: Tabla de Multiplicar</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">tabla_multiplicar(numero)</code> que imprima la tabla de multiplicar de ese número, del 1 al 10.</p>
+                    </div>
+                    <pre><code class="language-python"># Ejemplo de salida para tabla_multiplicar(3):
+# 3 x 1 = 3
+# 3 x 2 = 6
+# 3 x 3 = 9
+# ...
+# 3 x 10 = 30</code></pre>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

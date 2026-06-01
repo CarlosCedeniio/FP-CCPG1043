@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 03: Parámetros y Scope</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .cal-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 22px; } .cal-table th { text-align: left; padding: 12px; border-bottom: 2px solid #242424; font-weight: 600; } .cal-table td { padding: 12px; border-bottom: 1px solid rgba(34,42,53,0.1); font-family: 'Roboto Mono', monospace; text-align: left; } .cal-table td:last-child { font-family: 'Inter', sans-serif; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Parámetros y Scope
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 03
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Cómo las funciones reciben datos, devuelven múltiples resultados
+                        y por qué cada función vive en su propio mundo aislado.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: PARÁMETRO VS ARGUMENTO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Una Distinción Clave</h2>
+                    <h1>Parámetro vs. Argumento</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3>Parámetro</h3>
+                            <p class="text-small">La <b>variable</b> que aparece en la definición de la función. Es el <b>molde</b>, el nombre que usaremos internamente. No tiene valor todavía.</p>
+                            <pre style="margin-top: 12px; font-size: 14px;"><code class="language-python">def saludar(nombre):
+#           ↑ PARÁMETRO
+    print(f"Hola, {nombre}!")</code></pre>
+                        </div>
+                        <div class="cal-card">
+                            <h3>Argumento</h3>
+                            <p class="text-small">El <b>valor real</b> que le pasamos al llamar la función. Es el <b>dato concreto</b> que llenará el molde.</p>
+                            <pre style="margin-top: 12px; font-size: 14px;"><code class="language-python">saludar("Ana")
+#       ↑ ARGUMENTO
+# "Ana" se asigna a nombre</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Múltiples Entradas</h2>
+                    <h1>Varios Parámetros</h1>
+                    <div class="cal-card">
+                        <p>Una función puede recibir varios parámetros separados por comas. <b>El orden importa</b>: el primer argumento va al primer parámetro, el segundo al segundo, y así.</p>
+                        <pre style="margin-top: 20px;"><code class="language-python">def calcular_promedio(nota1, nota2, nota3):
+    suma = nota1 + nota2 + nota3
+    return suma / 3
+
+resultado = calcular_promedio(8.5, 9.0, 7.5)
+print(resultado)  # 8.333...</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: PARÁMETROS POR DEFECTO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Valores Opcionales</h2>
+                    <h1>Parámetros por Defecto</h1>
+                    <div class="cal-card">
+                        <p>Puedes asignar un valor a un parámetro usando <code class="text-bold">=</code> en la definición. Si el usuario no pasa ese argumento, se usará el valor por defecto automáticamente.</p>
+                        <pre style="margin-top: 20px;"><code class="language-python">def calcular_precio_final(precio, iva=0.15):
+    return precio + (precio * iva)
+
+# Usa el IVA por defecto (15%)
+print(calcular_precio_final(100))    # 115.0
+
+# Especifica un IVA distinto
+print(calcular_precio_final(100, 0.05))  # 105.0</code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Regla Importante</h2>
+                    <h1>Los Defaults van al Final</h1>
+                    <div class="cal-card">
+                        <p>Los parámetros con valor por defecto siempre deben estar <b>después</b> de los parámetros sin valor por defecto. De lo contrario, Python no puede saber cuál argumento corresponde a cuál parámetro.</p>
+                    </div>
+                    <div class="grid-2" style="margin-top: 24px;">
+                        <div class="cal-card cal-card-compact" style="border: 2px solid #4caf50;">
+                            <h3 style="color: #2e7d32;">Correcto</h3>
+                            <pre style="margin-top: 8px; font-size: 14px;"><code class="language-python">def funcion(a, b, c=10):
+    ...</code></pre>
+                        </div>
+                        <div class="cal-card cal-card-compact" style="border: 2px solid #d32f2f;">
+                            <h3 style="color: #d32f2f;">Error de Sintaxis</h3>
+                            <pre style="margin-top: 8px; font-size: 14px;"><code class="language-python">def funcion(a=10, b, c):
+    # SyntaxError!</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: MÚLTIPLES VALORES -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Más de un Resultado</h2>
+                    <h1>Retornar Múltiples Valores</h1>
+                    <div class="cal-card">
+                        <p>Una función puede retornar varios valores a la vez separándolos con comas. Python los empaqueta automáticamente en una <b>tupla</b>.</p>
+                        <pre style="margin-top: 20px;"><code class="language-python">def calcular_estadisticas(numeros):
+    minimo = min(numeros)
+    maximo = max(numeros)
+    promedio = sum(numeros) / len(numeros)
+    return minimo, maximo, promedio
+
+notas = [7.5, 9.0, 6.0, 8.5]
+resultado = calcular_estadisticas(notas)
+print(resultado)  # (6.0, 9.0, 7.75)</code></pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Desempaquetar el Resultado</h2>
+                    <h1>Tuple Unpacking</h1>
+                    <div class="cal-card">
+                        <p>En lugar de guardar la tupla completa, puedes asignar cada valor a su propia variable en una sola línea:</p>
+                        <pre style="margin-top: 20px;"><code class="language-python">def calcular_estadisticas(numeros):
+    return min(numeros), max(numeros), sum(numeros)/len(numeros)
+
+notas = [7.5, 9.0, 6.0, 8.5]
+
+# Tuple unpacking: cada valor va a su variable
+minimo, maximo, promedio = calcular_estadisticas(notas)
+
+print(f"Mínimo:   {minimo}")    # 6.0
+print(f"Máximo:   {maximo}")    # 9.0
+print(f"Promedio: {promedio}")  # 7.75</code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: SCOPE -->
+            <section>
+                <section>
+                    <h2 class="text-muted">El Mundo Privado de las Funciones</h2>
+                    <h1>Scope Local</h1>
+                    <div class="cal-card">
+                        <p>Las variables que creas <b>dentro</b> de una función solo existen mientras esa función se ejecuta. Al terminar, desaparecen. Este concepto se llama <b>scope local</b>.</p>
+                    </div>
+                    <pre style="margin-top: 24px;"><code class="language-python">def calcular_doble(numero):
+    resultado = numero * 2  # "resultado" solo existe aquí
+    return resultado
+
+calcular_doble(5)
+print(resultado)  # NameError: 'resultado' no existe aquí</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Analogía</h2>
+                    <h1>Lo que pasa dentro, queda dentro</h1>
+                    <div class="cal-card">
+                        <p>Piensa en cada función como una <b>habitación con paredes opacas</b>. Lo que ocurre dentro no es visible desde afuera, y lo que existe afuera no entra automáticamente adentro.</p>
+                        <div class="grid-2" style="margin-top: 24px;">
+                            <div>
+                                <h3 style="font-size: 20px;">Variables locales</h3>
+                                <p class="text-small text-muted">Existen solo dentro de la función. Se crean al entrar y se destruyen al salir.</p>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 20px;">Variables globales</h3>
+                                <p class="text-small text-muted">Existen fuera de las funciones. Las funciones pueden <b>leerlas</b>, pero no deben depender de ellas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Regla de Diseño</h2>
+                    <h1>Toda Info Entra por Parámetros</h1>
+                    <div class="grid-2">
+                        <div class="cal-card" style="border: 2px solid #d32f2f;">
+                            <h3 style="color: #d32f2f;">Incorrecto</h3>
+                            <p class="text-small">La función usa una variable externa. Si esa variable cambia o no existe, la función falla.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">tasa_iva = 0.15  # variable externa
+
+def calcular_iva(precio):
+    # Dependencia oculta: usa tasa_iva
+    return precio * tasa_iva</code></pre>
+                        </div>
+                        <div class="cal-card" style="border: 2px solid #4caf50;">
+                            <h3 style="color: #2e7d32;">Correcto</h3>
+                            <p class="text-small">La función recibe todo lo que necesita como parámetros. Es independiente y predecible.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def calcular_iva(precio, tasa):
+    # Sin dependencias externas
+    return precio * tasa
+
+calcular_iva(100, 0.15)</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: ERRORES COMUNES -->
+            <section>
+                <h2 class="text-muted">Resolución de Problemas</h2>
+                <h1>Errores Comunes</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">TypeError: faltan argumentos</h3>
+                        <p class="text-small">Llamar una función sin pasar todos los argumentos requeridos.</p>
+                        <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def sumar(a, b):
+    return a + b
+
+sumar(5)
+# TypeError: sumar() missing
+# 1 required argument: 'b'</code></pre>
+                    </div>
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">TypeError: demasiados argumentos</h3>
+                        <p class="text-small">Pasar más argumentos de los que la función espera.</p>
+                        <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def saludar(nombre):
+    print(f"Hola, {nombre}!")
+
+saludar("Ana", "Luis")
+# TypeError: saludar() takes 1
+# argument but 2 were given</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: EJERCICIOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 1: Calculadora de Notas</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">calcular_nota_final(p1, p2, p3)</code> que reciba tres notas parciales y retorne <b>tres valores</b>: la nota mínima, la nota máxima y el promedio final.</p>
+                        <p style="margin-top: 20px;">Usa tuple unpacking para mostrar cada resultado por separado.</p>
+                    </div>
+                    <pre><code class="language-python"># minimo, maximo, promedio = calcular_nota_final(7.5, 9.0, 8.0)
+# print(f"Mínimo: {minimo}, Máximo: {maximo}, Promedio: {promedio}")</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 2: Precio con IVA</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">precio_con_iva(precio, iva=0.15)</code> que calcule el precio final incluyendo el IVA.</p>
+                        <ul style="margin-top: 16px; font-size: 22px; padding-left: 24px;">
+                            <li>Si no se pasa IVA, usará 15% por defecto.</li>
+                            <li>Prueba la función con y sin el parámetro <code>iva</code>.</li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python"># precio_con_iva(200)        → 230.0
+# precio_con_iva(200, 0.12)  → 224.0</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 3: Conversor de Temperatura</h1>
+                    <div class="cal-card">
+                        <p>Escribe una función <code class="text-bold">convertir_temperatura(valor, unidad="C")</code> que convierta temperaturas.</p>
+                        <ul style="margin-top: 16px; font-size: 22px; padding-left: 24px;">
+                            <li>Si <code>unidad="C"</code>, convierte Celsius → Fahrenheit.</li>
+                            <li>Si <code>unidad="F"</code>, convierte Fahrenheit → Celsius.</li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python"># Fórmulas:
+# C → F: (celsius * 1.8) + 32
+# F → C: (fahrenheit - 32) / 1.8</code></pre>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

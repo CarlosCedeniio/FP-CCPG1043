@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 03: Funciones Booleanas y Composición</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Funciones Booleanas y Composición
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 03
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Funciones que responden preguntas con Verdadero o Falso,
+                        y cómo combinar funciones para resolver problemas más complejos.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: FUNCIONES BOOLEANAS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Funciones que Responden Preguntas</h2>
+                    <h1>¿Qué es una Función Booleana?</h1>
+                    <div class="cal-card">
+                        <p>Es una función cuyo <code class="text-bold">return</code> siempre entrega <code class="text-bold">True</code> o <code class="text-bold">False</code>. En lugar de calcular un número, <b>evalúa una condición</b>.</p>
+                    </div>
+                    <div class="grid-3" style="margin-top: 24px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Prefijo <code>es_</code></h3>
+                            <p>Comprueba una característica: <code>es_par</code>, <code>es_adulto</code>.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Prefijo <code>tiene_</code></h3>
+                            <p>Verifica si algo existe: <code>tiene_descuento</code>, <code>tiene_stock</code>.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Prefijo <code>puede_</code></h3>
+                            <p>Comprueba un permiso o capacidad: <code>puede_votar</code>.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Ejemplos</h2>
+                    <h1>Funciones Booleanas en Acción</h1>
+                    <pre><code class="language-python" style="font-size: 16px;">def es_par(numero):
+    """Retorna True si el número es par."""
+    return numero % 2 == 0
+
+def es_mayor_de_edad(edad):
+    """Retorna True si la persona es mayor de 18."""
+    return edad >= 18
+
+def tiene_descuento(monto_compra):
+    """Retorna True si la compra supera $50."""
+    return monto_compra > 50
+
+# Uso
+print(es_par(4))              # True
+print(es_mayor_de_edad(16))   # False
+print(tiene_descuento(75.0))  # True</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Error Clásico</h2>
+                    <h1>return vs. comparar</h1>
+                    <div class="grid-2">
+                        <div class="cal-card" style="border: 2px solid #d32f2f;">
+                            <h3 style="color: #d32f2f;">Incorrecto</h3>
+                            <p class="text-small">Se imprime la comparación en lugar de retornarla. La función retorna <code>None</code>.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def es_par(numero):
+    print(numero % 2 == 0)
+    # No retorna nada útil</code></pre>
+                        </div>
+                        <div class="cal-card" style="border: 2px solid #4caf50;">
+                            <h3 style="color: #2e7d32;">Correcto</h3>
+                            <p class="text-small">Se retorna el resultado de la comparación directamente como <code>True</code> o <code>False</code>.</p>
+                            <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def es_par(numero):
+    return numero % 2 == 0
+    # Retorna True o False</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: COMPOSICIÓN -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Funciones que Usan Funciones</h2>
+                    <h1>Composición Básica</h1>
+                    <div class="cal-card">
+                        <p>Una función puede llamar a otra función dentro de su cuerpo. Esto nos permite construir soluciones complejas a partir de piezas pequeñas y reutilizables.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 16px;">def es_par(numero):
+    return numero % 2 == 0
+
+def mostrar_paridad(numero):
+    if es_par(numero):          # Llama a es_par
+        print(f"{numero} es par")
+    else:
+        print(f"{numero} es impar")
+
+mostrar_paridad(7)  # 7 es impar
+mostrar_paridad(4)  # 4 es par</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Construir con Bloques</h2>
+                    <h1>Funciones que Llaman Funciones</h1>
+                    <pre><code class="language-python" style="font-size: 16px;">def calcular_iva(precio, tasa=0.15):
+    return precio * tasa
+
+def aplicar_descuento(precio, porcentaje):
+    return precio * (1 - porcentaje)
+
+def calcular_precio_final(precio_base):
+    """Aplica descuento del 10% y luego el IVA."""
+    precio_con_descuento = aplicar_descuento(precio_base, 0.10)
+    precio_final = precio_con_descuento + calcular_iva(precio_con_descuento)
+    return precio_final
+
+print(calcular_precio_final(100))  # 103.5</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">Cada función hace <b>una sola cosa bien</b>. <code>calcular_precio_final</code> no necesita saber cómo se calcula el IVA; simplemente lo pide.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Reto Mental</h2>
+                    <h1>¿Qué imprimirá este código?</h1>
+                    <div class="cal-card">
+                        <pre><code class="language-python">def es_aprobado(nota):
+    return nota >= 7.0
+
+def mostrar_resultado(nombre, nota):
+    if es_aprobado(nota):
+        print(f"{nombre}: Aprobado ({nota})")
+    else:
+        print(f"{nombre}: Reprobado ({nota})")
+
+mostrar_resultado("Ana", 8.5)
+mostrar_resultado("Luis", 5.0)</code></pre>
+                        <p class="text-small text-muted" style="margin-top: 20px;">Razona el flujo antes de ejecutar.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN: ERRORES COMUNES -->
+            <section>
+                <h2 class="text-muted">Resolución de Problemas</h2>
+                <h1>Errores Comunes</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">NameError por Scope</h3>
+                        <p class="text-small">Intentar usar desde afuera una variable que solo existe dentro de una función.</p>
+                        <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def calcular():
+    total = 100
+
+calcular()
+print(total)
+# NameError: 'total' no definida</code></pre>
+                    </div>
+                    <div class="cal-card">
+                        <h3 style="color: #d32f2f;">None Inadvertido</h3>
+                        <p class="text-small">Olvidar el <code>return</code> en una función que debería retornar un valor.</p>
+                        <pre style="margin-top: 12px; font-size: 13px;"><code class="language-python">def calcular_doble(n):
+    resultado = n * 2
+    # Olvidé: return resultado
+
+x = calcular_doble(5)
+print(x)  # None, no 10</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: EJERCICIOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica Integradora</h2>
+                    <h1>Ejercicio 1: Verificador de Contraseña</h1>
+                    <div class="cal-card">
+                        <p>Escribe dos funciones booleanas:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li><code class="text-bold">tiene_longitud_valida(clave)</code>: retorna <code>True</code> si la clave tiene 8 o más caracteres.</li>
+                            <li><code class="text-bold">es_clave_valida(clave)</code>: retorna <code>True</code> solo si tiene longitud válida.</li>
+                        </ul>
+                        <p style="margin-top: 20px;">Llama a <code>tiene_longitud_valida</code> desde dentro de <code>es_clave_valida</code>.</p>
+                    </div>
+                    <pre><code class="language-python"># Hint: len(clave) retorna el número de caracteres</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica Integradora</h2>
+                    <h1>Ejercicio 2: Clasificador de Notas</h1>
+                    <div class="cal-card">
+                        <p>Escribe las siguientes funciones y úsalas en conjunto:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li><code class="text-bold">es_aprobado(nota)</code>: <code>True</code> si nota ≥ 7.</li>
+                            <li><code class="text-bold">es_sobresaliente(nota)</code>: <code>True</code> si nota ≥ 9.</li>
+                            <li><code class="text-bold">clasificar_nota(nombre, nota)</code>: imprime "Sobresaliente", "Aprobado" o "Reprobado" según corresponda. Usa las funciones anteriores.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica Integradora</h2>
+                    <h1>Ejercicio 3: Sistema de Descuentos</h1>
+                    <div class="cal-card">
+                        <p>Construye un sistema con tres funciones:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li><code class="text-bold">tiene_descuento(monto)</code>: <code>True</code> si monto > 100.</li>
+                            <li><code class="text-bold">calcular_descuento(monto, porcentaje=0.10)</code>: retorna el monto descontado.</li>
+                            <li><code class="text-bold">procesar_compra(monto)</code>: si tiene descuento, aplica el descuento y muestra el precio final; si no, muestra el precio original.</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>
