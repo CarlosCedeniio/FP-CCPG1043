@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 04: Condicionales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Condicionales
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 04
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Cómo hacer que un programa tome decisiones:
+                        <code>if</code>, <code>if-else</code> e <code>if-elif-else</code>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: if BÁSICO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Tomar Decisiones</h2>
+                    <h1>La estructura <code>if</code></h1>
+                    <div class="cal-card">
+                        <p>El bloque <code class="text-bold">if</code> ejecuta su cuerpo <b>solo si la condición es <code>True</code></b>. Si es <code>False</code>, se ignora por completo.</p>
+                    </div>
+                    <pre><code class="language-python">nota = 8.5
+
+if nota >= 7.0:
+    print("Aprobado")
+
+# Si nota fuera 5.0, no se imprimiría nada</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">La <b>indentación de 4 espacios</b> delimita el bloque. Todo lo que esté indentado pertenece al <code>if</code>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Dos Caminos</h2>
+                    <h1>if-else</h1>
+                    <div class="cal-card">
+                        <p><code class="text-bold">else</code> define qué hacer cuando la condición es <code>False</code>. Exactamente uno de los dos bloques siempre se ejecuta.</p>
+                    </div>
+                    <pre><code class="language-python">edad = 16
+
+if edad >= 18:
+    print("Mayor de edad")
+else:
+    print("Menor de edad")
+
+# Con edad = 16  →  "Menor de edad"
+# Con edad = 20  →  "Mayor de edad"</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: if-elif-else -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Múltiples Caminos</h2>
+                    <h1>if-elif-else</h1>
+                    <div class="cal-card">
+                        <p><code class="text-bold">elif</code> agrega ramas intermedias. Python las evalúa <b>en orden</b> y ejecuta <b>solo la primera que sea True</b>.</p>
+                    </div>
+                    <pre><code class="language-python">nota = 8.0
+
+if nota >= 9.0:
+    print("A — Sobresaliente")
+elif nota >= 7.0:
+    print("B — Aprobado")
+elif nota >= 5.0:
+    print("C — Suficiente")
+else:
+    print("D — Reprobado")
+
+# nota = 8.0  →  "B — Aprobado"</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Combinando Condiciones</h2>
+                    <h1>Condiciones compuestas</h1>
+                    <pre><code class="language-python" style="font-size: 14px;">def es_mayor_de_edad(edad):
+    return edad >= 18
+
+def tiene_membresia(usuario):
+    return usuario in ["Ana", "Luis", "María"]
+
+usuario = "Ana"
+edad    = 20
+
+# and: ambas condiciones deben ser True
+if es_mayor_de_edad(edad) and tiene_membresia(usuario):
+    print("Acceso completo")
+elif es_mayor_de_edad(edad):
+    print("Acceso básico (sin membresía)")
+else:
+    print("Acceso denegado")</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">Usar <b>funciones booleanas</b> como condiciones hace el código más legible y reutilizable.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: ANIDAR -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Estructuras Anidadas</h2>
+                    <h1>if dentro de if</h1>
+                    <div class="cal-card">
+                        <p>Se puede colocar un <code>if</code> dentro del bloque de otro <code>if</code>. Útil cuando la segunda condición <b>solo tiene sentido si la primera ya es True</b>.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 16px;">puntaje = 85
+asistencia = 0.90
+
+if puntaje >= 60:
+    if asistencia >= 0.75:
+        print("Aprobado")
+    else:
+        print("Reprobado por inasistencia")
+else:
+    print("Reprobado por puntaje")</code></pre>
+                    <div class="cal-card" style="margin-top: 20px;">
+                        <p class="text-small text-muted">Cuando ambas condiciones son independientes, a veces es más claro usar <code>and</code> directamente en un solo <code>if</code>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Errores Clásicos</h2>
+                    <h1>= vs == y los dos puntos</h1>
+                    <div class="grid-2">
+                        <div class="cal-card" style="border: 2px solid #d32f2f;">
+                            <h3 style="color: #d32f2f;">Incorrecto</h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 13px;"># = asigna, no compara
+if x = 10:
+    print("es diez")
+# SyntaxError
+
+# Falta los dos puntos
+if x == 10
+    print("es diez")
+# SyntaxError</code></pre>
+                        </div>
+                        <div class="cal-card" style="border: 2px solid #4caf50;">
+                            <h3 style="color: #2e7d32;">Correcto</h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 13px;"># == compara valores
+if x == 10:
+    print("es diez")
+
+# Siempre termina con :
+if x == 10:
+    print("es diez")</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: EJERCICIOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 1: Clasificador de Temperatura</h1>
+                    <div class="cal-card">
+                        <p>Dada una variable <code class="text-bold">temperatura</code> en grados Celsius, clasifícala con el siguiente criterio:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li>Menor a 0 → <code>"Muy frío"</code></li>
+                            <li>0 a 14 → <code>"Frío"</code></li>
+                            <li>15 a 24 → <code>"Ideal"</code></li>
+                            <li>25 a 34 → <code>"Caliente"</code></li>
+                            <li>35 o más → <code>"Muy caliente"</code></li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python"># Hint: usa if-elif-else con 5 ramas
+temperatura = float(input("Temperatura: "))</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 2: Descuento por Categoría</h1>
+                    <div class="cal-card">
+                        <p>Un cliente tiene una <code class="text-bold">categoria</code> ("VIP", "Regular", "Nuevo") y un <code class="text-bold">monto</code> de compra. Define funciones booleanas y úsalas para calcular el descuento:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li>VIP: 20% de descuento</li>
+                            <li>Regular con monto &gt; 100: 10% de descuento</li>
+                            <li>Cualquier otro caso: sin descuento</li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python">def es_vip(categoria):
+    return categoria == "VIP"
+
+def tiene_descuento_regular(categoria, monto):
+    return categoria == "Regular" and monto > 100</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 3: Validador de Credenciales</h1>
+                    <div class="cal-card">
+                        <p>Dadas las variables <code class="text-bold">usuario</code> y <code class="text-bold">clave</code>, valida el acceso con las siguientes reglas usando <code>if</code> anidados:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li>Si el usuario no existe → <code>"Usuario no encontrado"</code></li>
+                            <li>Si el usuario existe pero la clave es incorrecta → <code>"Clave incorrecta"</code></li>
+                            <li>Si ambos son correctos → <code>"Bienvenido, [usuario]"</code></li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python">usuarios_validos = ["admin", "carlos", "ana"]
+clave_correcta  = "python2026"</code></pre>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>
