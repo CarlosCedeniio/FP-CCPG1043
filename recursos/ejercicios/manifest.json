@@ -1,0 +1,93 @@
+[
+  {
+    "id": "ej-001",
+    "title": "Verificar si un número es par o impar",
+    "tags": ["condicionales", "operadores"],
+    "difficulty": "basico",
+    "file": "ej-001.md"
+  },
+  {
+    "id": "ej-002",
+    "title": "Generador de contraseña aleatoria",
+    "tags": ["funciones", "random", "strings"],
+    "difficulty": "intermedio",
+    "file": "ej-002.md"
+  },
+  {
+    "id": "ej-003",
+    "title": "Filtrar y ordenar una lista de notas",
+    "tags": ["listas", "bucles", "condicionales"],
+    "difficulty": "intermedio",
+    "file": "ej-003.md"
+  },
+  {
+    "id": "ej-004",
+    "title": "Trazar operaciones con listas y strings",
+    "tags": ["strings", "listas"],
+    "difficulty": "intermedio",
+    "file": "ej-004.md"
+  },
+  {
+    "id": "ej-005",
+    "title": "Generador de código de reserva de boletos",
+    "tags": ["strings", "listas", "random"],
+    "difficulty": "basico",
+    "file": "ej-005.md"
+  },
+  {
+    "id": "ej-006",
+    "title": "Control de acceso a evento",
+    "tags": ["condicionales", "listas", "strings"],
+    "difficulty": "intermedio",
+    "file": "ej-006.md"
+  },
+  {
+    "id": "ej-007",
+    "title": "Identificar salida imposible en generador de saludos",
+    "tags": ["funciones", "random", "strings"],
+    "difficulty": "basico",
+    "file": "ej-007.md"
+  },
+  {
+    "id": "ej-008",
+    "title": "Trazar función con parámetro por defecto y booleano",
+    "tags": ["funciones", "condicionales", "strings"],
+    "difficulty": "basico",
+    "file": "ej-008.md"
+  },
+  {
+    "id": "ej-009",
+    "title": "Generador de credenciales para empleados",
+    "tags": ["funciones", "random", "strings"],
+    "difficulty": "basico",
+    "file": "ej-009.md"
+  },
+  {
+    "id": "ej-010",
+    "title": "Analizar código de matrícula con split",
+    "tags": ["strings", "condicionales"],
+    "difficulty": "basico",
+    "file": "ej-010.md"
+  },
+  {
+    "id": "ej-011",
+    "title": "Validador de inventario de productos con funciones",
+    "tags": ["strings", "condicionales", "funciones"],
+    "difficulty": "intermedio",
+    "file": "ej-011.md"
+  },
+  {
+    "id": "ej-012",
+    "title": "Generador de notas aleatorias del salón",
+    "tags": ["bucles", "condicionales", "random"],
+    "difficulty": "basico",
+    "file": "ej-012.md"
+  },
+  {
+    "id": "ej-013",
+    "title": "Simulador de lanzamiento de dados",
+    "tags": ["bucles", "condicionales", "random"],
+    "difficulty": "basico",
+    "file": "ej-013.md"
+  }
+]
