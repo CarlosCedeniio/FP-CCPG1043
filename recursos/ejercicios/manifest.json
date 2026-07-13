@@ -89,5 +89,40 @@
     "tags": ["bucles", "condicionales", "random"],
     "difficulty": "basico",
     "file": "ej-013.md"
+  },
+  {
+    "id": "ej-014",
+    "title": "Registro de un producto (crear, acceder y modificar un diccionario)",
+    "tags": ["diccionarios"],
+    "difficulty": "basico",
+    "file": "ej-014.md"
+  },
+  {
+    "id": "ej-015",
+    "title": "Contador de frecuencia de palabras",
+    "tags": ["diccionarios", "bucles", "strings"],
+    "difficulty": "intermedio",
+    "file": "ej-015.md"
+  },
+  {
+    "id": "ej-016",
+    "title": "Invertir un diccionario",
+    "tags": ["diccionarios", "bucles"],
+    "difficulty": "intermedio",
+    "file": "ej-016.md"
+  },
+  {
+    "id": "ej-017",
+    "title": "Combinar inventarios de dos tiendas",
+    "tags": ["diccionarios", "bucles", "condicionales"],
+    "difficulty": "intermedio",
+    "file": "ej-017.md"
+  },
+  {
+    "id": "ej-018",
+    "title": "Agrupar estudiantes por rango de calificación",
+    "tags": ["diccionarios", "bucles", "condicionales"],
+    "difficulty": "avanzado",
+    "file": "ej-018.md"
   }
 ]
