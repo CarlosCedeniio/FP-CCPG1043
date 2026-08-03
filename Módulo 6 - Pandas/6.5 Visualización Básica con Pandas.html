@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 06: Visualización Básica con Pandas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+        .chart-img { max-height: 320px; max-width: 100%; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; display: block; margin: 12px auto 0; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 60px; margin-bottom: 0; line-height: 1;">
+                        Visualización Básica con Pandas
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 06 · Clase 3 (bloque 2)
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        No se evalúa en el examen, pero es clave para presentar resultados.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: .plot() -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Graficar</h2>
+                    <h1><code>.plot()</code>: Directo desde Pandas</h1>
+                    <div class="cal-card">
+                        <p>Pandas usa por debajo <code>matplotlib</code>, pero evita escribir la mayoría del código de bajo nivel. Con <code class="text-bold">.plot()</code> sobre una Series o un DataFrame ya tienes un gráfico razonable.</p>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('estudiantes_analizado.csv')
+# kind: 'line', 'bar', 'barh', 'hist', 'box'...</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: LÍNEAS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Gráfico de Líneas</h2>
+                    <h1>Datos que Cambian en Secuencia</h1>
+                    <pre><code class="language-python" style="font-size: 15px;">asistencia_semanal = pd.Series(
+    [100, 95, 90, 85, 92, 98],
+    index=['Semana 1','Semana 2','Semana 3','Semana 4','Semana 5','Semana 6']
+)
+asistencia_semanal.plot(kind='line', marker='o')</code></pre>
+                    <img class="chart-img" style="max-height: 260px;" src="img/6.5-linea.png" alt="Gráfico de líneas: asistencia semanal">
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: BARRAS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Gráfico de Barras</h2>
+                    <h1>Comparar entre Categorías</h1>
+                    <pre><code class="language-python">df.set_index('nombre')['nota_final'].plot(kind='bar')</code></pre>
+                    <img class="chart-img" src="img/6.5-barras.png" alt="Gráfico de barras: nota final por estudiante">
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: HISTOGRAMA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Histograma</h2>
+                    <h1>Cómo se Distribuyen los Valores</h1>
+                    <pre><code class="language-python">df['nota_final'].plot(kind='hist', bins=5)</code></pre>
+                    <img class="chart-img" src="img/6.5-histograma.png" alt="Histograma de nota_final">
+                </section>
+            </section>
+
+            <!-- SECCIÓN E: BOXPLOT -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Boxplot</h2>
+                    <h1>Mediana, Cuartiles y Atípicos</h1>
+                    <pre><code class="language-python">df[['nota_final', 'asistencia']].plot(kind='box')</code></pre>
+                    <img class="chart-img" src="img/6.5-boxplot.png" alt="Boxplot de nota_final y asistencia">
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: TOP N / BOTTOM N -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Top N / Bottom N</h2>
+                    <h1>Combinar <code>nlargest</code> con <code>.plot()</code></h1>
+                    <pre><code class="language-python">top3 = df.nlargest(3, 'nota_final').set_index('nombre')['nota_final']
+top3.plot(kind='barh')</code></pre>
+                    <img class="chart-img" src="img/6.5-topN.png" alt="Top 3 estudiantes por nota final">
+                </section>
+            </section>
+
+            <!-- SECCIÓN G: GROUPBY().PLOT() -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Contenido Núcleo</h2>
+                    <h1><code>groupby().plot()</code></h1>
+                    <div class="cal-card cal-card-compact">
+                        <p>Encadena directamente una agregación por grupo con <code>.plot()</code>, sin pasos intermedios.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">df.groupby('carrera')['nota_final'].mean().plot(kind='bar')</code></pre>
+                    <img class="chart-img" style="max-height: 280px;" src="img/6.5-groupby.png" alt="Promedio de nota final por carrera">
+                </section>
+            </section>
+
+            <!-- SECCIÓN H: PRÁCTICA / CIERRE DEL MÓDULO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica — Cierre del Módulo 6</h2>
+                    <h1>Caso Práctico: Pipeline Completo</h1>
+                    <div class="cal-card">
+                        <p>Un solo script que recorre <b>cargar → limpiar → filtrar → agrupar → graficar</b> sobre <code>estudiantes_crudo.csv</code> (el original, sin limpiar):</p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li><b>Cargar:</b> lee el CSV con el separador correcto.</li>
+                            <li><b>Limpiar:</b> rellena la nota faltante, elimina duplicados, limpia <code>carrera</code>, renombra <code>nota</code> a <code>calificacion</code>.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Pipeline Completo (continuación)</h1>
+                    <div class="cal-card">
+                        <ul style="font-size: 20px; padding-left: 24px;">
+                            <li><b>Transformar:</b> crea <code>nota_final</code> (90% calificación + 10% asistencia).</li>
+                            <li><b>Filtrar:</b> quédate solo con quienes <b>no</b> están en riesgo (<code>asistencia &gt;= 80</code> <b>y</b> <code>calificacion &gt;= 7.0</code>).</li>
+                            <li><b>Agrupar:</b> promedio de <code>nota_final</code> por carrera, ordenado de mayor a menor.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Pipeline Completo (cierre)</h1>
+                    <div class="cal-card">
+                        <p><b>Graficar:</b></p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li>Barras del promedio de <code>nota_final</code> por carrera (<code>groupby().plot()</code>).</li>
+                            <li>Barras horizontales con el top 3 de estudiantes.</li>
+                            <li>Histograma de <code>nota_final</code> de todo el grupo.</li>
+                            <li>Guarda el DataFrame final en <code>estudiantes_final.csv</code>.</li>
+                        </ul>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p class="text-small text-muted"><b>Pista:</b> este ejercicio no introduce ningún método nuevo — es encadenar lo aprendido en 6.2, 6.3, 6.4 y 6.5 en un solo flujo.</p>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

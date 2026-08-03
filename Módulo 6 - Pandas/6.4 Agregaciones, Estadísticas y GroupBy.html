@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 06: Agregaciones, Estadísticas y GroupBy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 60px; margin-bottom: 0; line-height: 1;">
+                        Agregaciones, Estadísticas y GroupBy
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 06 · Clase 3
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        De la tabla fila a fila, a resúmenes por categoría con una sola línea de código.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: PUNTO DE PARTIDA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Punto de Partida</h2>
+                    <h1>Dataset ya Analizado</h1>
+                    <div class="cal-card">
+                        <p>Seguimos con lo que dejamos en la clase anterior: <code>estudiantes_analizado.csv</code>, ya con <code>nota_final</code> y <code>en_riesgo</code> calculados.</p>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+
+df = pd.read_csv('estudiantes_analizado.csv')
+print(df[['nombre', 'carrera', 'nota_final', 'asistencia']])</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: ORDENAR -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Ordenar</h2>
+                    <h1><code>.sort_values()</code></h1>
+                    <pre><code class="language-python">orden = df.sort_values('nota_final', ascending=False)
+print(orden[['nombre', 'nota_final']])
+# Valentina  9.45
+# Marcela    9.17
+# Isabella   8.91</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Ordenar</h2>
+                    <h1>Varias Columnas e <code>inplace</code></h1>
+                    <div class="cal-card">
+                        <p>Puedes ordenar por <b>varias columnas a la vez</b>, cada una con su propio orden ascendente/descendente.</p>
+                    </div>
+                    <pre><code class="language-python">orden_multi = df.sort_values(
+    ['carrera', 'nota_final'], ascending=[True, False]
+)</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 16px;">
+                        <p><code class="text-bold">inplace=True</code> modifica el DataFrame original directamente y no devuelve nada — úsalo con cuidado, porque pierdes el orden original.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: CATEGÓRICOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Tipos de Dato</h2>
+                    <h1>Categóricos vs. No Categóricos</h1>
+                    <div class="grid-2">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Categóricos</h3>
+                            <p>Un grupo/etiqueta de un conjunto limitado. Ej.: <code>carrera</code>. No tiene sentido sumarlos.</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>No Categóricos</h3>
+                            <p>Cantidades medibles. Ej.: <code>nota_final</code>, <code>asistencia</code>. Sí se pueden promediar/sumar.</p>
+                        </div>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p>A los categóricos les aplicamos <b>conteos y agrupaciones</b>; a los numéricos, <b>estadísticas</b>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar Categorías</h2>
+                    <h1><code>unique()</code>, <code>value_counts()</code>, <code>isin()</code></h1>
+                    <pre><code class="language-python">print(df['carrera'].unique())
+# ['ingeniería' 'administración' 'medicina' 'derecho' 'arquitectura']
+
+print(df['carrera'].value_counts())
+# ingeniería        3
+# administración    2
+# medicina          2</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar Categorías</h2>
+                    <h1>Filtrar con <code>.isin()</code></h1>
+                    <div class="cal-card">
+                        <p>Filtra filas cuyo valor está dentro de una <b>lista</b> de opciones — evita encadenar varios <code>|</code>.</p>
+                    </div>
+                    <pre><code class="language-python">carreras = df[df['carrera'].isin(['ingeniería', 'medicina'])]
+print(carreras[['nombre', 'carrera']])</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: GROUPBY -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Contenido Núcleo</h2>
+                    <h1><code>.groupby()</code>: Estadísticas por Categoría</h1>
+                    <div class="cal-card">
+                        <p><code>.groupby('columna')</code> agrupa las filas según sus valores, y luego aplicas una agregación <b>a cada grupo por separado</b>.</p>
+                    </div>
+                    <pre><code class="language-python">print(df.groupby('carrera')[['nota_final', 'asistencia']].mean().round(2))
+#                 nota_final  asistencia
+# carrera
+# administración        7.48        86.0
+# ingeniería            8.51        85.0
+# medicina              9.31        98.5</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">GroupBy</h2>
+                    <h1>Una Sola Columna del Grupo</h1>
+                    <pre><code class="language-python">print(df.groupby('carrera')['nota_final'].mean().round(2))</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p>Con una sola línea obtuvimos el promedio <b>por carrera</b> — imposible de leer de un vistazo en la tabla original, fila por fila.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN E: NLARGEST / NSMALLEST / RESET_INDEX -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Extremos</h2>
+                    <h1><code>nlargest()</code> y <code>nsmallest()</code></h1>
+                    <pre><code class="language-python">print(df.nlargest(3, 'nota_final')[['nombre', 'nota_final']])
+print(df.nsmallest(3, 'nota_final')[['nombre', 'nota_final']])</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p>El top-3 y el bottom-3, ya ordenados — sin necesidad de llamar <code>.sort_values()</code> primero.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">GroupBy</h2>
+                    <h1><code>.reset_index()</code></h1>
+                    <div class="cal-card">
+                        <p>Al agrupar, la columna de agrupación pasa a ser el <b>índice</b> del resultado. Si prefieres tenerla de vuelta como columna común, usa <code class="text-bold">.reset_index()</code>.</p>
+                    </div>
+                    <pre><code class="language-python">resumen = df.groupby('carrera')['nota_final'].mean().round(2).reset_index()
+print(resumen)
+#          carrera  nota_final
+# 0 administración        7.48
+# 1     arquitectura        6.50</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: APPLY Y AGG -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Resumir</h2>
+                    <h1><code>.apply()</code></h1>
+                    <div class="cal-card">
+                        <p>Ejecuta una función propia sobre cada valor de una columna.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">def clasificar(nota):
+    if nota >= 9:
+        return 'Excelente'
+    elif nota >= 7.5:
+        return 'Bueno'
+    else:
+        return 'Regular'
+
+df['categoria'] = df['nota_final'].apply(clasificar)</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Resumir</h2>
+                    <h1><code>.agg()</code>: Varias Agregaciones a la Vez</h1>
+                    <pre><code class="language-python">resumen = df.groupby('carrera')['nota_final'].agg(['mean', 'max', 'min', 'count']).round(2)
+print(resumen)
+#                 mean   max   min  count
+# ingeniería      8.51  8.91  8.03      3
+# medicina        9.31  9.45  9.17      2</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p>Con <code>.agg()</code> obtienes, en un solo paso, un mini-reporte estadístico por carrera.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN G: PRÁCTICA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Caso Práctico: Reporte por Carrera</h1>
+                    <div class="cal-card">
+                        <p>Sobre <code>estudiantes_analizado.csv</code>:</p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li>Ordena por <code>carrera</code> (asc.) y, dentro de cada carrera, por <code>asistencia</code> (desc.).</li>
+                            <li>Muestra cuántos estudiantes hay por carrera con <code>value_counts()</code>.</li>
+                            <li>Filtra <code>'ingeniería'</code>, <code>'medicina'</code> o <code>'derecho'</code> con <code>.isin()</code>.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Reporte por Carrera (continuación)</h1>
+                    <div class="cal-card">
+                        <ul style="font-size: 20px; padding-left: 24px;">
+                            <li>Agrupa por <code>carrera</code> y calcula promedio y máximo de <code>nota_final</code> (<code>.agg(['mean','max'])</code>), guardando el resultado en <code>resumen_carreras</code> con <code>reset_index()</code>.</li>
+                            <li>Encuentra los 3 mejores por <code>nota_final</code> y los 3 con menor <code>asistencia</code>.</li>
+                            <li>Con <code>.apply()</code>, crea <code>beca</code>: <code>'Sí'</code> si <code>nota_final &gt;= 9.0</code>, <code>'No'</code> en otro caso.</li>
+                            <li>Con <code>.groupby('carrera')['beca']</code>, cuenta becados por carrera.</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

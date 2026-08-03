@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 06: Introducción a Pandas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Introducción a Pandas
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 06 · Clase 1
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Series y DataFrames: las dos estructuras que vamos a usar durante todo el módulo.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: POR QUÉ PANDAS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Procesamiento de Datos</h2>
+                    <h1>¿Por Qué Pandas?</h1>
+                    <div class="cal-card">
+                        <p>Hasta ahora usamos listas y diccionarios. Eso funciona, pero se vuelve incómodo apenas los datos se parecen a una <b>tabla</b>: filas y columnas, como una hoja de Excel. Pandas es la librería de Python para trabajar con datos en forma de tabla.</p>
+                    </div>
+                    <div class="grid-3">
+                        <div class="cal-card cal-card-compact">
+                            <h3>Administración</h3>
+                            <p>Ventas mensuales por sucursal</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Medicina</h3>
+                            <p>Signos vitales de pacientes</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3>Ingeniería / C. Sociales</h3>
+                            <p>Mediciones de un sensor · Respuestas de una encuesta</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Empezamos Aquí</h2>
+                    <h1>Las Dos Librerías</h1>
+                    <div class="cal-card">
+                        <p>Estas dos líneas van a estar presentes en prácticamente todo lo que hagamos de aquí en adelante. <code>pd</code> y <code>np</code> son los alias estándar de toda la comunidad de Python.</p>
+                    </div>
+                    <pre><code class="language-python">import pandas as pd
+import numpy as np</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: NUMPY EN UNA DIAPOSITIVA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Numpy en Una Diapositiva</h2>
+                    <h1>Series = Array + Índice</h1>
+                    <div class="cal-card">
+                        <p>Pandas está construido <b>encima</b> de Numpy. Un <code class="text-bold">array</code> es como una lista, salvo que todos sus elementos son del mismo tipo y las operaciones se aplican <b>a todo el arreglo a la vez</b>.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">notas_lista = [8.5, 7.2, 9.1, 6.8]
+notas_array = np.array(notas_lista)
+
+print(notas_array + 1)   # Sumar 1 a cada elemento, de una sola vez
+# [ 9.5  8.2 10.1  7.8]</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 16px;">
+                        <p><b>Una Series de Pandas es, en el fondo, un array de Numpy con una etiqueta para cada elemento.</b></p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: SERIES -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Series</h2>
+                    <h1>Desde una Lista</h1>
+                    <div class="cal-card">
+                        <p>Una <code>Series</code> es una columna de datos con un índice asociado. Por defecto, ese índice es numérico (0, 1, 2...).</p>
+                    </div>
+                    <pre><code class="language-python">notas = pd.Series([8.5, 7.2, 9.1, 6.8])
+print(notas)
+# 0    8.5
+# 1    7.2
+# 2    9.1
+# 3    6.8</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Series</h2>
+                    <h1>Desde un Diccionario</h1>
+                    <div class="cal-card">
+                        <p>Si la creas desde un diccionario, <b>las claves se convierten en el índice</b> automáticamente.</p>
+                    </div>
+                    <pre><code class="language-python">notas = pd.Series({'Ana': 8.5, 'Luis': 7.2, 'Marcela': 9.1})
+print(notas)
+# Ana        8.5
+# Luis       7.2
+# Marcela    9.1</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Series</h2>
+                    <h1>Índices No Numéricos</h1>
+                    <div class="cal-card">
+                        <p>También puedes crear una Series desde un array y asignarle un índice explícito. El índice no tiene que ser numérico: puede ser texto, fechas, o cualquier etiqueta con sentido.</p>
+                    </div>
+                    <pre><code class="language-python">notas_array = np.array([8.5, 7.2, 9.1])
+notas = pd.Series(notas_array, index=['Ana', 'Luis', 'Marcela'])
+print(notas)
+# Ana        8.5
+# Luis       7.2
+# Marcela    9.1</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: DATAFRAME -->
+            <section>
+                <section>
+                    <h2 class="text-muted">DataFrame</h2>
+                    <h1>Nuestro Dataset de Referencia</h1>
+                    <div class="cal-card">
+                        <p>Un <code>DataFrame</code> es una tabla: varias columnas que comparten el mismo índice de filas. Se crea <b>desde un diccionario de listas</b>, donde cada clave es una columna. <b>Este es nuestro dataset de referencia</b> para el resto del módulo.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 16px;">datos = {
+    'nombre':     ['Ana', 'Luis', 'Marcela', 'Pedro', 'Sofía'],
+    'carrera':    ['Ingeniería', 'Administración', 'Medicina', 'Ingeniería', 'Derecho'],
+    'semestre':   [3, 5, 2, 3, 6],
+    'nota':       [8.5, 7.2, 9.1, 6.8, 8.0],
+    'asistencia': [95, 80, 98, 70, 88]
+}
+estudiantes = pd.DataFrame(datos)</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">DataFrame</h2>
+                    <h1>Desde una Lista de Diccionarios</h1>
+                    <div class="cal-card">
+                        <p>Cada diccionario de la lista representa <b>una fila</b>.</p>
+                    </div>
+                    <pre><code class="language-python">filas = [
+    {'nombre': 'Ana', 'carrera': 'Ingeniería', 'nota': 8.5},
+    {'nombre': 'Luis', 'carrera': 'Administración', 'nota': 7.2},
+]
+df = pd.DataFrame(filas)</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">DataFrame</h2>
+                    <h1>Desde un Array de Numpy</h1>
+                    <div class="cal-card">
+                        <p>Indicando el nombre de las columnas con <code>columns</code>.</p>
+                    </div>
+                    <pre><code class="language-python">matriz = np.array([[8.5, 95], [7.2, 80], [9.1, 98]])
+df2 = pd.DataFrame(matriz, columns=['nota', 'asistencia'])</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN E: SELECCIÓN E INDEXACIÓN -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Selección</h2>
+                    <h1>Seleccionar Columnas</h1>
+                    <div class="cal-card">
+                        <p>Una sola columna con <code>df['columna']</code> (devuelve una Series). Varias columnas con una lista de nombres <code>df[['col1', 'col2']]</code> (devuelve un DataFrame).</p>
+                    </div>
+                    <pre><code class="language-python">print(estudiantes['nombre'])          # Series
+print(estudiantes[['nombre', 'nota']]) # DataFrame</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Indexación</h2>
+                    <h1><code>.loc</code> vs <code>.iloc</code></h1>
+                    <div class="cal-card">
+                        <p>Esta es una de las partes que más confunde al principio. <code class="text-bold">.loc</code> selecciona por <b>etiqueta</b> (el valor del índice). <code class="text-bold">.iloc</code> selecciona por <b>posición</b> (como en una lista, desde 0).</p>
+                    </div>
+                    <div class="cal-card cal-card-compact">
+                        <p><b>Regla práctica:</b> si accedes por nombre/etiqueta, usa <code>.loc</code>. Si accedes por posición/orden, usa <code>.iloc</code>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Indexación</h2>
+                    <h1>La Diferencia en la Práctica</h1>
+                    <div class="cal-card">
+                        <p>Con el índice numérico por defecto, ambos <i>parecen</i> iguales. La diferencia se nota cuando cambiamos el índice a algo no numérico:</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">por_nombre = estudiantes.set_index('nombre')
+
+por_nombre.loc['Marcela']    # Busca por el nombre (etiqueta)
+por_nombre.iloc[2]           # Busca por posición: la fila en índice 2
+
+# Filas 0 a 2 (incluyente), solo 2 columnas
+estudiantes.loc[0:2, ['nombre', 'nota']]
+
+# Primeras 3 filas, primeras 2 columnas, por posición
+estudiantes.iloc[0:3, 0:2]</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: COLUMNAS E INSPECCIÓN -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Transformar</h2>
+                    <h1>Agregar Nuevas Columnas</h1>
+                    <div class="cal-card">
+                        <p>Se agrega asignando un valor a un nombre de columna nuevo — incluso calculándola a partir de otras columnas existentes.</p>
+                    </div>
+                    <pre><code class="language-python">estudiantes['aprobado'] = estudiantes['nota'] >= 7.0
+print(estudiantes[['nombre', 'nota', 'aprobado']])
+#     nombre  nota  aprobado
+# 0      Ana   8.5      True
+# 3    Pedro   6.8     False</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Métodos de Inspección Rápida</h1>
+                    <div class="cal-card">
+                        <p>Antes de analizar cualquier DataFrame, siempre conviene explorarlo primero:</p>
+                    </div>
+                    <div class="grid-2">
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.head(n)</code> / <code>.tail(n)</code></h3>
+                            <p>Primeras / últimas <code>n</code> filas</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.info()</code></h3>
+                            <p>Tipos de dato y nulos por columna</p>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top: 16px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.describe()</code></h3>
+                            <p>Estadísticas resumidas de columnas numéricas</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.mean() .sum() .min() .max()</code></h3>
+                            <p>Estadísticas puntuales por columna</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Inspección en Código</h1>
+                    <pre><code class="language-python">print(estudiantes.head(2))
+print(estudiantes['nota'].describe())
+print(estudiantes['asistencia'].mean())
+# count    5.000000
+# mean     7.920000
+# std      0.936483
+# min      6.800000
+# max      9.100000
+#
+# 86.2</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Numpy en Pandas</h2>
+                    <h1>Redondeo y Conversión de Tipos</h1>
+                    <div class="cal-card">
+                        <p><code class="text-bold">.round(n)</code> redondea a <code>n</code> decimales. <code class="text-bold">.astype(tipo)</code> convierte a otro tipo de dato. Ambos vienen de Numpy, pero se usan sobre columnas de Pandas.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">estudiantes['nota'] = estudiantes['nota'].round(0)
+estudiantes['semestre'] = estudiantes['semestre'].astype(float)
+
+print(estudiantes.dtypes)
+# nombre     object
+# semestre  float64
+# nota      float64</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN G: PRÁCTICA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Caso Práctico: Ficha de Estudiantes</h1>
+                    <div class="cal-card">
+                        <p>Construye y explora, desde cero, un DataFrame de estudiantes de tu propia facultad (compañeros/as reales o inventados):</p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li>Crea un diccionario con 6+ estudiantes: <code>nombre</code>, <code>carrera</code>, <code>semestre</code>, <code>nota</code>, <code>asistencia</code>.</li>
+                            <li>Conviértelo en <code>mis_estudiantes</code> y muestra <code>.head()</code>, <code>.info()</code>, <code>.describe()</code>.</li>
+                            <li>Selecciona solo <code>nombre</code> y <code>nota</code> en un nuevo DataFrame.</li>
+                            <li>Con <code>.loc</code>/<code>.iloc</code>, muestra la primera y la última fila completas.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ficha de Estudiantes (continuación)</h1>
+                    <div class="cal-card">
+                        <ul style="font-size: 20px; padding-left: 24px;">
+                            <li>Agrega <code>nota_redondeada</code> aplicando <code>.round()</code> sobre <code>nota</code>.</li>
+                            <li>Agrega una columna booleana <code>beca</code>: <code>True</code> si <code>nota &gt;= 8.5</code> <b>y</b> <code>asistencia &gt;= 90</code>.</li>
+                            <li>Calcula el promedio de <code>nota</code> y de <code>asistencia</code> para todo el grupo.</li>
+                        </ul>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p class="text-small text-muted"><b>Pista:</b> el paso de <code>beca</code> necesita combinar dos condiciones con <code>&amp;</code> — lo veremos formalmente con filtros booleanos en la próxima clase, pero puedes intentarlo ya.</p>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

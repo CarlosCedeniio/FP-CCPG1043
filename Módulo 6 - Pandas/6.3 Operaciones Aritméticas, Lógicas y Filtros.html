@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 06: Operaciones Aritméticas, Lógicas y Filtros</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 56px; margin-bottom: 0; line-height: 1;">
+                        Operaciones Aritméticas, Lógicas y Filtros
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 06 · Clase 2 (bloque 2)
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Combinar columnas, construir condiciones y quedarte solo con las filas que te interesan.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: PUNTO DE PARTIDA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Retomamos</h2>
+                    <h1>El Dataset Limpio</h1>
+                    <div class="cal-card">
+                        <p>En la clase pasada dejamos un archivo limpio: <code>estudiantes_limpio.csv</code>. Lo usamos como punto de partida — <b>limpiar una sola vez, analizar muchas veces</b>.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">import pandas as pd
+
+df = pd.read_csv('estudiantes_limpio.csv')
+print(df)
+#       nombre         carrera  calificacion  asistencia
+# 0        Ana      ingeniería          8.50          95
+# 1       Luis  administración          7.20          80</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: ARITMÉTICA ENTRE SERIES -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Aritmética</h2>
+                    <h1>Operaciones entre Series</h1>
+                    <div class="cal-card">
+                        <p>Igual que con Numpy, las operaciones entre dos columnas se aplican <b>fila por fila, automáticamente</b> — sin ningún bucle <code>for</code>.</p>
+                    </div>
+                    <pre><code class="language-python">df['nota_final'] = (df['calificacion'] * 0.9 + (df['asistencia'] / 100) * 1.0).round(2)
+print(df[['nombre', 'calificacion', 'asistencia', 'nota_final']])
+#       nombre  calificacion  asistencia  nota_final
+# 0        Ana          8.50          95        8.60
+# 1       Luis          7.20          80        7.28</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 16px;">
+                        <p>Ponderamos calificación (90%) y asistencia (10%) — sin recorrer fila por fila manualmente.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: OPERADORES RELACIONALES -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Lógica</h2>
+                    <h1>Series Booleanas</h1>
+                    <div class="cal-card">
+                        <p>Comparar una columna con un valor produce una <b>Series de <code>True</code>/<code>False</code></b>, una por cada fila.</p>
+                    </div>
+                    <pre><code class="language-python">print(df['calificacion'] >= 8.0)
+# 0     True
+# 1    False
+# 2     True
+# 3     True</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 16px;">
+                        <p>Esta Series booleana, por sí sola, ya nos dice quién cumple la condición. El siguiente paso natural es usarla para <b>filtrar</b>.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: FILTROS BOOLEANOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Filtros — Contenido Núcleo</h2>
+                    <h1><code>&amp;</code> y <code>|</code>, no <code>and</code> / <code>or</code></h1>
+                    <div class="cal-card">
+                        <p>Para quedarte solo con las filas que cumplen una condición: <code>df[condición]</code>. Para combinar <b>varias condiciones</b>, se usan <code class="text-bold">&amp;</code> (Y) y <code class="text-bold">|</code> (O) — cada condición entre paréntesis.</p>
+                    </div>
+                    <pre><code class="language-python">aprobados = df[df['calificacion'] >= 8.0]
+
+# Y: calificación alta Y buena asistencia
+buenos = df[(df['calificacion'] >= 8.0) & (df['asistencia'] >= 90)]</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Filtros</h2>
+                    <h1>Combinar con <code>|</code></h1>
+                    <pre><code class="language-python">ing_o_med = df[(df['carrera'] == 'ingeniería') | (df['carrera'] == 'medicina')]
+print(ing_o_med[['nombre', 'carrera']])
+# Ana, Marcela, Pedro, Valentina, Isabella</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">El Porqué</h2>
+                    <h1><code>and</code>/<code>or</code> vs <code>&amp;</code>/<code>|</code></h1>
+                    <div class="grid-2">
+                        <div class="cal-card" style="border: 2px solid #d32f2f;">
+                            <h3 style="color: #d32f2f;">Incorrecto</h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 15px;">df[df['a'] > 5 and df['b'] > 5]
+# ValueError: The truth value
+# of a Series is ambiguous</code></pre>
+                        </div>
+                        <div class="cal-card" style="border: 2px solid #4caf50;">
+                            <h3 style="color: #2e7d32;">Correcto</h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 15px;">df[(df['a'] > 5) & (df['b'] > 5)]
+# Funciona: compara
+# elemento a elemento</code></pre>
+                        </div>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p class="text-small text-muted"><code>and</code>/<code>or</code> esperan un único <code>True</code>/<code>False</code>, no una Series completa de valores.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN E: MASK -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Reemplazar</h2>
+                    <h1><code>.mask()</code>: Según una Condición</h1>
+                    <div class="cal-card">
+                        <p><code>.mask(condición, valor)</code> reemplaza con <code>valor</code> (o <code>NaN</code> si no se especifica) los elementos donde la condición es <code class="text-bold">True</code>. Es lo opuesto a un filtro: en vez de <i>quedarte</i> con lo que cumple, <i>modificas</i> lo que cumple.</p>
+                    </div>
+                    <pre><code class="language-python">print(df['calificacion'].mask(df['calificacion'] < 7.0, other=0))
+# Todas las calificaciones igual, excepto Carlos (6.5 → 0)</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: IDXMAX / IDXMIN -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Extremos</h2>
+                    <h1><code>.idxmax()</code> y <code>.idxmin()</code></h1>
+                    <div class="cal-card">
+                        <p>Devuelven el <b>índice</b> (la etiqueta de fila) donde está el valor máximo o mínimo — no el valor en sí, sino <i>dónde</i> está.</p>
+                    </div>
+                    <pre><code class="language-python">mejor = df['calificacion'].idxmax()
+peor_asistencia = df['asistencia'].idxmin()
+
+print(df.loc[mejor, 'nombre'])           # Valentina
+print(df.loc[peor_asistencia, 'nombre']) # Carlos</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN G: PRÁCTICA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Caso Práctico: Estudiantes en Riesgo</h1>
+                    <div class="cal-card">
+                        <p>Sobre <code>estudiantes_limpio.csv</code>:</p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li>Crea <code>nota_final</code> (90% calificación + 10% asistencia).</li>
+                            <li>Crea <code>en_riesgo</code>: <code>True</code> si <code>asistencia &lt; 80</code> <b>o</b> <code>calificacion &lt; 7.0</code>.</li>
+                            <li>Filtra y muestra solo los estudiantes con <code>en_riesgo == True</code>.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Estudiantes en Riesgo (continuación)</h1>
+                    <div class="cal-card">
+                        <ul style="font-size: 20px; padding-left: 24px;">
+                            <li>Filtra los de <code>ingeniería</code> <b>con</b> <code>nota_final &gt;= 8.5</code>.</li>
+                            <li>Con <code>.mask()</code>, crea <code>asistencia_ajustada</code>: igual a <code>asistencia</code>, pero reemplazando por <code>0</code> los valores menores a <code>70</code>.</li>
+                            <li>Encuentra el nombre con <code>nota_final</code> más alta y más baja (<code>.idxmax()</code> / <code>.idxmin()</code>).</li>
+                            <li>Guarda el resultado en <code>estudiantes_analizado.csv</code>.</li>
+                        </ul>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p class="text-small text-muted"><b>Pista:</b> guarda cada condición booleana en una variable (<code>bajo_asistencia = df['asistencia'] &lt; 80</code>) y combínalas después — es más fácil de leer que una sola línea larga.</p>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

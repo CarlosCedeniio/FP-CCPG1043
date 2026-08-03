@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 06: Carga de Archivos y Limpieza de Datos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 64px; margin-bottom: 0; line-height: 1;">
+                        Carga de Archivos y Limpieza de Datos
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 06 · Clase 2
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Cargar un CSV, tratar nulos y duplicados, y dejar los datos listos para analizar.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: LA REALIDAD DE LOS DATOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Antes de Analizar</h2>
+                    <h1>La Realidad de los Datos</h1>
+                    <div class="cal-card">
+                        <p>La clase pasada creamos DataFrames a mano, con datos perfectos. En la vida real, <b>los datos casi nunca llegan limpios</b>: encuestas, exportaciones de Excel, sistemas distintos... traen valores en blanco, filas repetidas, mayúsculas inconsistentes.</p>
+                    </div>
+                    <div class="cal-card cal-card-compact">
+                        <p>Vamos a trabajar con una versión <b>cruda</b> (sin limpiar) de nuestro dataset de estudiantes: <code>estudiantes_crudo.csv</code>.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: READ_CSV -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Cargar Datos</h2>
+                    <h1><code>pd.read_csv()</code></h1>
+                    <div class="cal-card">
+                        <p>Así se ve <code>estudiantes_crudo.csv</code> en un editor de texto. Usa <code class="text-bold">;</code> en vez de <code>,</code> (muy común en exportaciones de Excel en español) y a Pedro le falta la nota:</p>
+                    </div>
+                    <pre><code class="language-text" style="font-size: 18px;">nombre;carrera;semestre;nota;asistencia
+Ana;Ingeniería;3;8.5;95
+Luis;administración ;5;7.2;80
+Pedro;INGENIERÍA;3;;70
+...</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Cargar Datos</h2>
+                    <h1>Tres Argumentos Clave</h1>
+                    <pre><code class="language-python">import pandas as pd
+
+df = pd.read_csv('estudiantes_crudo.csv', sep=';')</code></pre>
+                    <div class="grid-2" style="margin-top: 24px;">
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>sep</code></h3>
+                            <p>Carácter separador de columnas (<code>','</code> por defecto)</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>header</code></h3>
+                            <p>Fila con los nombres de columna (0 por defecto; <code>None</code> si no hay encabezado)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Cargar Datos</h2>
+                    <h1><code>index_col</code></h1>
+                    <div class="cal-card">
+                        <p>Define qué columna usar como índice de filas, en vez del índice numérico por defecto.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">df2 = pd.read_csv('estudiantes_crudo.csv', sep=';', index_col='nombre')
+print(df2.head(2))
+#                    carrera  semestre  nota
+# nombre
+# Ana             Ingeniería         3   8.5
+# Luis       administración          5   7.2</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 12px;">
+                        <p class="text-small text-muted"><b>Ojo:</b> si la columna usada como índice tiene valores repetidos (como <code>nombre</code>, porque Ana aparece dos veces), el índice queda repetido — señal de que hay algo que limpiar.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: TO_CSV -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Guardar Datos</h2>
+                    <h1><code>pd.to_csv()</code></h1>
+                    <div class="cal-card">
+                        <p>Una vez que limpiemos el dataset, lo normal es guardar el resultado en un archivo nuevo, para no perder el trabajo ni tocar el original.</p>
+                    </div>
+                    <pre><code class="language-python">df.to_csv('estudiantes_intermedio.csv', index=False)</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p><code>index=False</code> evita que la columna de índice numérico se guarde como una columna más — casi siempre es lo que quieres.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: NULOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Diagnóstico</h2>
+                    <h1>Primero: <code>.info()</code></h1>
+                    <div class="cal-card">
+                        <p>Antes de limpiar nada, hay que <b>saber qué tan sucio está el dataset</b>. <code class="text-bold">.info()</code> muestra cuántos valores <b>no nulos</b> tiene cada columna — si un número es menor al total de filas, esa columna tiene nulos.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 17px;">df.info()
+# RangeIndex: 11 entries, 0 to 10
+#  #   Column      Non-Null Count  Dtype
+# ---  ------      --------------  -----
+#  0   nombre      11 non-null     object
+#  3   nota        10 non-null     float64  ← 1 nulo
+#  4   asistencia  11 non-null     int64</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Detectar</h2>
+                    <h1><code>isna()</code> y <code>notna()</code></h1>
+                    <div class="cal-card">
+                        <p>Pandas representa los valores faltantes como <code class="text-bold">NaN</code>. <code>isna()</code> devuelve <code>True</code> donde el valor es nulo; <code>notna()</code>, lo opuesto.</p>
+                    </div>
+                    <pre><code class="language-python">print(df['nota'].isna())
+# 0     False
+# 3      True   ← Pedro
+# 4     False</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Contar Nulos por Columna</h1>
+                    <div class="cal-card">
+                        <p>Combinando <code>isna()</code> con <code class="text-bold">.sum()</code> (True cuenta como 1) obtienes, de un vistazo, <b>cuántos nulos tiene cada columna</b> — el resumen que normalmente se revisa primero.</p>
+                    </div>
+                    <pre><code class="language-python">print(df.isna().sum())
+# nombre        0
+# carrera       0
+# nota          1
+# asistencia    0</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Ver las Filas con Nulos</h1>
+                    <div class="cal-card">
+                        <p>Ya sabemos <b>cuántos</b> nulos hay; ahora veamos <b>cuáles filas</b> son, usando <code>isna()</code> como filtro booleano — antes de decidir qué hacer con ellas.</p>
+                    </div>
+                    <pre><code class="language-python">print(df[df['nota'].isna()])
+#   nombre     carrera  semestre  nota  asistencia
+# 3  Pedro  INGENIERÍA         3   NaN          70</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1>Rellenar con un Valor Fijo</h1>
+                    <div class="cal-card">
+                        <p>La opción más simple de <code class="text-bold">.fillna()</code>: reemplazar todo nulo por un valor constante. Tiene sentido cuando <b>la ausencia del dato ya significa algo</b> — por ejemplo, un comentario vacío.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">encuesta = pd.DataFrame({'nombre': ['Ana','Luis','Sofía'],
+                          'comentario': ['Buena clase', None, 'Muy útil']})
+
+print(encuesta['comentario'].fillna('Sin comentario'))
+# 0       Buena clase
+# 1    Sin comentario
+# 2          Muy útil</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>.mean()</code> vs <code>.median()</code></h1>
+                    <div class="cal-card">
+                        <p>Para columnas numéricas, rellenar con el <b>promedio</b> es común, pero el promedio es sensible a valores atípicos. La <code class="text-bold">mediana</code> (el valor de en medio) es más robusta cuando hay notas muy altas o muy bajas.</p>
+                    </div>
+                    <pre><code class="language-python">df['nota'].fillna(df['nota'].mean())     # 8.14 — sensible a extremos
+df['nota'].fillna(df['nota'].median())   # 8.25 — más robusta ante outliers</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>.ffill()</code> y <code>.bfill()</code></h1>
+                    <div class="cal-card">
+                        <p>Cuando los datos están <b>en orden</b> (por ejemplo, semana a semana), tiene sentido rellenar con el valor <b>anterior</b> (<code class="text-bold">ffill</code>, "forward fill") o el <b>siguiente</b> (<code class="text-bold">bfill</code>, "backward fill") en vez de un promedio.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 17px;">asistencia_semanal = pd.Series([100, None, 90, None, None, 98])
+
+asistencia_semanal.ffill()   # [100, 100, 90, 90, 90, 98]  ← copia el anterior
+asistencia_semanal.bfill()   # [100,  90, 90, 98, 98, 98]  ← copia el siguiente</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1>Rellenar Distinto por Columna</h1>
+                    <div class="cal-card">
+                        <p>Si distintas columnas necesitan distinta estrategia, <code>.fillna()</code> acepta un <code class="text-bold">diccionario</code>: una regla por columna, en una sola línea.</p>
+                    </div>
+                    <pre><code class="language-python">df.fillna({'nota': df['nota'].mean(), 'asistencia': 0})</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 12px;">
+                        <p class="text-small text-muted"><b>Resumen:</b> valor fijo → la ausencia ya es informativa · media/mediana → medidas numéricas continuas · ffill/bfill → datos secuenciales · diccionario → cuando cada columna necesita su propia regla.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1>Eliminar Filas con <code>.dropna()</code></h1>
+                    <div class="cal-card">
+                        <p>Por defecto, <code class="text-bold">.dropna()</code> elimina toda fila que tenga <b>al menos un</b> valor nulo en <b>cualquier</b> columna.</p>
+                    </div>
+                    <pre><code class="language-python">df_sin_nulos = df.dropna()   # Elimina la fila de Pedro (índice 3)
+print(len(df), len(df_sin_nulos))   # 11 10</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p><b>¿Rellenar o eliminar?</b> Si son pocos nulos y perder esa fila no te preocupa, elimínala. Si necesitas conservar todas las filas, rellena con un criterio razonable.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>how='any'</code> vs <code>how='all'</code></h1>
+                    <div class="cal-card">
+                        <p>El parámetro <code class="text-bold">how</code> controla qué tan estricto es <code>.dropna()</code>. Con un ejemplo pequeño se ve claro:</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">ejemplo = pd.DataFrame({'a': [1, None, None], 'b': [2, 3, None]})
+
+ejemplo.dropna(how='any')   # Elimina si falta AL MENOS un valor → quedan 1 fila
+ejemplo.dropna(how='all')   # Elimina solo si TODOS son nulos     → quedan 2 filas</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 12px;">
+                        <p class="text-small text-muted"><code>how='any'</code> es el valor por defecto — el más estricto.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>subset</code>: Solo Ciertas Columnas</h1>
+                    <div class="cal-card">
+                        <p>Sin <code>subset</code>, <code>.dropna()</code> revisa <b>todas</b> las columnas. Con <code class="text-bold">subset</code>, solo elimina la fila si el nulo está en las columnas que indiques — ignora nulos en las demás.</p>
+                    </div>
+                    <pre><code class="language-python">df.dropna(subset=['nota'])   # Solo mira 'nota', ignora nulos en otras columnas
+# Da igual en este dataset (solo 'nota' tiene nulos), pero es clave
+# cuando hay varias columnas con datos faltantes</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>axis=1</code>: Eliminar Columnas</h1>
+                    <div class="cal-card">
+                        <p><code>.dropna()</code> no solo elimina filas: con <code class="text-bold">axis=1</code> elimina <b>columnas enteras</b> que tengan algún nulo — útil cuando una columna completa no es confiable.</p>
+                    </div>
+                    <pre><code class="language-python">print(df.dropna(axis=1).columns.tolist())
+# ['nombre', 'carrera', 'semestre', 'asistencia']
+# 'nota' desapareció por completo: tenía un nulo</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN E: DUPLICADOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Detectar Filas Duplicadas</h1>
+                    <div class="cal-card">
+                        <p><code class="text-bold">.duplicated()</code> devuelve una Series booleana: <code>True</code> en cada fila que es copia de una anterior. Con <code>.sum()</code> cuentas cuántas hay.</p>
+                    </div>
+                    <pre><code class="language-python">print(df.duplicated())
+# 0     False
+# 10     True   ← copia exacta de la fila 0
+
+print(df.duplicated().sum())   # 1</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Explorar</h2>
+                    <h1>Ver las Filas Duplicadas</h1>
+                    <div class="cal-card">
+                        <p>Igual que con los nulos, usa el resultado de <code>.duplicated()</code> como filtro para <b>ver la fila repetida</b> antes de eliminarla — nunca está de más confirmar qué se va a borrar.</p>
+                    </div>
+                    <pre><code class="language-python">print(df[df.duplicated()])
+#    nombre     carrera  semestre  nota  asistencia
+# 10    Ana  Ingeniería         3   8.5          95</code></pre>
+                    <div class="cal-card cal-card-compact" style="margin-top: 12px;">
+                        <p class="text-small text-muted"><code>keep='first'</code> es el valor por defecto: marca como duplicada la <b>segunda</b> copia en adelante. Con <code>df.duplicated(keep=False)</code> se marcan <b>todas</b> las copias, incluida la primera.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1>Eliminar con <code>.drop_duplicates()</code></h1>
+                    <pre><code class="language-python">df_sin_duplicados = df.drop_duplicates()
+print(len(df), len(df_sin_duplicados))   # 11 10</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p>Por defecto compara <b>todas</b> las columnas: dos filas solo se consideran duplicadas si son idénticas en cada una.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1><code>subset</code>: ¿Qué Cuenta como "Igual"?</h1>
+                    <div class="cal-card">
+                        <p>¿Qué pasa si dos filas comparten <code>nombre</code> y <code>carrera</code>, pero tienen distinta <code>nota</code>? Sin <code>subset</code>, <b>no</b> se consideran duplicadas — no son idénticas en todo.</p>
+                    </div>
+                    <pre><code class="language-python" style="font-size: 18px;">ejemplo = pd.DataFrame({
+    'nombre': ['Ana', 'Ana'], 'carrera': ['Ingeniería', 'Ingeniería'], 'nota': [8.5, 9.0]
+})
+ejemplo.duplicated()                              # [False, False] → no son idénticas
+ejemplo.duplicated(subset=['nombre', 'carrera'])  # [False, True]  → mismo nombre+carrera</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Tratar</h2>
+                    <h1>¿Y las Columnas Duplicadas?</h1>
+                    <div class="cal-card">
+                        <p><code>duplicated()</code>/<code>drop_duplicates()</code> comparan <b>filas</b>. Para saber si dos <b>columnas</b> son idénticas (por ejemplo, tras combinar datos de dos fuentes), se usa <code class="text-bold">.equals()</code>.</p>
+                    </div>
+                    <pre><code class="language-python">df['calificacion'] = df['nota']       # Columna duplicada por error
+
+print(df['nota'].equals(df['calificacion']))   # True
+df = df.drop(columns=['calificacion'])          # Se elimina como cualquier columna</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: RENOMBRAR / ELIMINAR COLUMNAS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Limpieza</h2>
+                    <h1>Renombrar y Eliminar Columnas</h1>
+                    <pre><code class="language-python">df = df.rename(columns={'nota': 'calificacion'})
+df = df.drop(columns=['asistencia'])
+
+print(df.columns.tolist())
+# ['nombre', 'carrera', 'semestre', 'calificacion']</code></pre>
+                    <div class="cal-card cal-card-compact">
+                        <p><code>rename()</code> recibe <code>{nombre_actual: nombre_nuevo}</code>. <code>drop(columns=[...])</code> también elimina filas si le pasas <code>index=[...]</code>.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN G: TEXTO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Limpieza</h2>
+                    <h1>Limpiar Texto con <code>.str</code></h1>
+                    <div class="cal-card">
+                        <p>Fíjate en <code>carrera</code>: <code>'Ingeniería'</code>, <code>'administración '</code>, <code>'INGENIERÍA'</code>, <code>' medicina'</code>... ¡todo eso debería ser una sola categoría! El accesor <code class="text-bold">.str</code> aplica métodos de texto a <b>toda una columna a la vez</b>.</p>
+                    </div>
+                    <pre><code class="language-python">carrera_limpia = df['carrera'].str.strip().str.lower()
+print(carrera_limpia)
+# 0         ingeniería
+# 1     administración
+# 2           medicina</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Limpieza</h2>
+                    <h1><code>.str.contains()</code></h1>
+                    <div class="grid-2">
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.str.strip()</code></h3>
+                            <p>Quita espacios al inicio/final</p>
+                        </div>
+                        <div class="cal-card cal-card-compact">
+                            <h3><code>.str.lower()</code></h3>
+                            <p>Convierte a minúsculas (también <code>.str.upper()</code>)</p>
+                        </div>
+                    </div>
+                    <pre><code class="language-python" style="margin-top: 20px;">print(carrera_limpia.str.contains('medicina'))
+# True solo en Marcela y Valentina</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN H: PRÁCTICA -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Caso Práctico: Limpieza Completa</h1>
+                    <div class="cal-card">
+                        <p>Toma <code>estudiantes_crudo.csv</code> y déjalo listo para análisis, guardando el resultado en un nuevo archivo:</p>
+                        <ul style="font-size: 20px; padding-left: 24px; margin-top: 12px;">
+                            <li>Carga el archivo con el separador correcto y revisa <code>.info()</code>.</li>
+                            <li>Cuenta los nulos por columna (<code>isna().sum()</code>) y muestra las filas afectadas.</li>
+                            <li>Rellena la nota faltante con el promedio.</li>
+                            <li>Muestra las filas duplicadas y luego elimínalas.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Limpieza Completa (continuación)</h1>
+                    <div class="cal-card">
+                        <ul style="font-size: 20px; padding-left: 24px;">
+                            <li>Limpia <code>carrera</code>: quita espacios y conviértela a minúsculas.</li>
+                            <li>Renombra <code>nota</code> a <code>calificacion</code>.</li>
+                            <li>Elimina la columna <code>semestre</code>.</li>
+                            <li>Guarda el resultado en <code>estudiantes_limpio.csv</code>, sin la columna de índice.</li>
+                        </ul>
+                    </div>
+                    <div class="cal-card cal-card-compact" style="margin-top: 20px;">
+                        <p class="text-small text-muted"><b>Pista:</b> haz los pasos en orden e imprime el DataFrame después de cada uno — así detectas de inmediato si algo no quedó como esperabas.</p>
+                    </div>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

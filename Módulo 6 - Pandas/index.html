@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 6 — Pandas · CCPG1043</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:                   #201d1d;
+            --ink-deep:              #0f0000;
+            --canvas:                #fdfcfc;
+            --surface-soft:          #f8f7f7;
+            --surface-card:          #f1eeee;
+            --hairline:              rgba(15,0,0,0.12);
+            --hairline-strong:       #646262;
+            --body:                  #424245;
+            --mute:                  #646262;
+            --ash:                   #9a9898;
+            --on-dark:               #fdfcfc;
+            --font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace,
+                    'SFMono-Regular', Menlo, Monaco, Consolas,
+                    'Liberation Mono', 'Courier New', monospace;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Container ──────────────────────────────── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Nav ────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--canvas);
+            border-bottom: 1px solid var(--hairline);
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            width: 100%;
+        }
+
+        .nav-wordmark {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* ── Buttons ────────────────────────────────── */
+        .btn-primary {
+            background: var(--ink);
+            color: var(--canvas) !important;
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            padding: 4px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none !important;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .btn-primary:active { background: var(--ink-deep); }
+
+        /* ── Page Header ─────────────────────────────── */
+        .page-header {
+            padding: 64px 0 56px;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--mute);
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--ink);
+            max-width: 680px;
+            margin-bottom: 20px;
+        }
+
+        .section-body {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--body);
+            max-width: 680px;
+        }
+
+        /* ── Sections ───────────────────────────────── */
+        .section {
+            padding: 64px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .section-rule {
+            border: none;
+            border-top: 1px solid var(--hairline);
+            margin-bottom: 32px;
+        }
+
+        /* ── List rows ──────────────────────────────── */
+        .list-rows { margin-top: 0; }
+
+        .list-row {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--body);
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+        }
+
+        .list-row:last-child { border-bottom: none; }
+
+        .list-marker {
+            color: var(--ink);
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+
+        .list-label {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        /* ── Module rows (clickable) ────────────────── */
+        a.module-row {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.module-row:last-child { border-bottom: none; }
+        a.module-row:hover .list-label { text-decoration: underline; }
+
+        /* ── Shortcuts ──────────────────────────────── */
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .shortcut-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .shortcut-sublabel {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+        }
+
+        .code-block {
+            background: var(--surface-soft);
+            border: 1px solid var(--hairline);
+            padding: 14px 18px;
+            font-size: 13px;
+            font-family: var(--font);
+            color: var(--body);
+            overflow-x: auto;
+            line-height: 1.7;
+            white-space: pre;
+        }
+
+        /* ── Links ──────────────────────────────────── */
+        a.link-inline {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        /* ── Footer ─────────────────────────────────── */
+        .footer { padding: 32px 0; }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+            border: 1px solid var(--hairline);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .footer-links li {
+            flex: 1;
+            border-right: 1px solid var(--hairline);
+        }
+
+        .footer-links li:last-child { border-right: none; }
+
+        .footer-links a {
+            display: block;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 2;
+            color: var(--mute);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover { color: var(--ink); text-decoration: underline; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            line-height: 2;
+            color: var(--mute);
+        }
+
+        /* ── Responsive ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-title { font-size: 22px; }
+            .page-header, .section { padding: 40px 0; }
+            .shortcut-grid { grid-template-columns: 1fr; }
+            .module-row, a.module-row, .list-row { align-items: flex-start; }
+            .list-label { display: block; }
+            .footer-links { flex-wrap: wrap; }
+            .footer-links li { flex: 1 1 50%; }
+            .footer-bottom { flex-direction: column; gap: 0; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .page-title { font-size: 20px; }
+            .code-block { font-size: 12px; }
+            .footer-links li { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVIGATION ───────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="../" class="nav-wordmark">CCPG1043</a>
+                <ul class="nav-links">
+                    <li><a href="#contenido">Contenido</a></li>
+                    <li><a href="#shortcuts">Shortcuts</a></li>
+                    <li><a href="#recursos">Recursos</a></li>
+                </ul>
+                <a href="mailto:caencede@espol.edu.ec" class="btn-primary">Contacto →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── PAGE HEADER ──────────────────────────────── -->
+    <div class="page-header">
+        <div class="container">
+            <p class="breadcrumb">
+                <a href="../" class="link-inline" style="color:var(--mute);text-decoration:none;">CCPG1043</a>
+                &nbsp;/&nbsp;Módulo 6
+            </p>
+            <h1 class="page-title">Módulo 6 — Pandas</h1>
+            <p class="section-body">
+                El módulo más extenso del curso: 3 clases de 2 horas para pasar de listas y diccionarios
+                a trabajar con datos en forma de tabla. Cubrimos Series y DataFrames, carga y limpieza
+                de archivos CSV, operaciones lógicas y filtros, agregaciones con <code>groupby()</code>,
+                y una introducción a la visualización de datos. El énfasis está en la limpieza y
+                manipulación de datos: la parte del análisis de datos que más se usa en la práctica,
+                sin importar tu carrera.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── CONTENIDO ────────────────────────────────── -->
+    <section class="section" id="contenido">
+        <div class="container">
+            <p class="section-label">Contenido</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <a href="6.1%20Introducci%C3%B3n%20a%20Pandas%20-%20Series%20y%20DataFrames.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">6.1 Introducción a Pandas — Series y DataFrames</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Numpy en una diapositiva, crear Series/DataFrames, .loc/.iloc, métodos de inspección</span>
+                    </span>
+                </a>
+                <a href="6.2%20Carga%20de%20Archivos%20y%20Limpieza%20de%20Datos.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">6.2 Carga de Archivos y Limpieza de Datos</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">read_csv/to_csv, nulos, duplicados, renombrar/eliminar columnas, texto con .str</span>
+                    </span>
+                </a>
+                <a href="6.3%20Operaciones%20Aritm%C3%A9ticas%2C%20L%C3%B3gicas%20y%20Filtros.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">6.3 Operaciones Aritméticas, Lógicas y Filtros</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Aritmética entre Series, filtros con &amp;/|, .mask(), .idxmax()/.idxmin()</span>
+                    </span>
+                </a>
+                <a href="6.4%20Agregaciones%2C%20Estad%C3%ADsticas%20y%20GroupBy.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">6.4 Agregaciones, Estadísticas y GroupBy</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">sort_values, categóricos, unique/value_counts/isin, groupby, nlargest/nsmallest, apply/agg</span>
+                    </span>
+                </a>
+                <a href="6.5%20Visualizaci%C3%B3n%20B%C3%A1sica%20con%20Pandas.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">6.5 Visualización Básica con Pandas</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">.plot() — líneas, barras, histograma, boxplot, top N, groupby().plot() · no se evalúa</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SHORTCUTS ────────────────────────────────── -->
+    <section class="section" id="shortcuts">
+        <div class="container">
+            <p class="section-label">Shortcuts de Pandas útiles en este módulo</p>
+            <hr class="section-rule">
+            <div class="shortcut-grid">
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Crear Series y DataFrame</p>
+                    <pre class="code-block">import pandas as pd
+
+s = pd.Series({'Ana': 8.5, 'Luis': 7.2})
+
+df = pd.DataFrame({
+    'nombre': ['Ana', 'Luis'],
+    'nota':   [8.5, 7.2]
+})</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">.loc vs .iloc</p>
+                    <pre class="code-block">df.loc[0]              # Por etiqueta
+df.iloc[0]              # Por posición
+
+df.loc[0:2, ['nombre']]
+df.iloc[0:3, 0:2]</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Cargar CSV y tratar nulos</p>
+                    <pre class="code-block">df = pd.read_csv('datos.csv', sep=';')
+
+df['nota'] = df['nota'].fillna(df['nota'].mean())
+df = df.dropna()
+df = df.drop_duplicates()</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Filtros booleanos</p>
+                    <pre class="code-block">df[(df['nota'] >= 8) & (df['asistencia'] >= 90)]
+
+df[(df['carrera'] == 'medicina') | (df['carrera'] == 'derecho')]
+
+df['nota'].mask(df['nota'] < 7, other=0)</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">GroupBy y agregaciones</p>
+                    <pre class="code-block">df.groupby('carrera')['nota'].mean()
+
+df.groupby('carrera')['nota'] \
+  .agg(['mean', 'max', 'min'])
+
+df.sort_values('nota', ascending=False)</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Graficar</p>
+                    <pre class="code-block">df.groupby('carrera')['nota'] \
+  .mean().plot(kind='bar')
+
+df['nota'].plot(kind='hist')
+df.nlargest(3, 'nota').plot(kind='barh')</pre>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── RECURSOS ─────────────────────────────────── -->
+    <section class="section" id="recursos">
+        <div class="container">
+            <p class="section-label">Recursos adicionales</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://programacion.espol.edu.ec/" target="_blank" class="link-inline">Página oficial de la materia</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank" class="link-inline">Ejercicios y exámenes resueltos</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://pandas.pydata.org/docs/user_guide/10min.html" target="_blank" class="link-inline">10 minutes to pandas — Documentación oficial</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://numpy.org/doc/stable/user/absolute_beginners.html" target="_blank" class="link-inline">Numpy — Guía para principiantes</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://www.kaggle.com/learn/pandas" target="_blank" class="link-inline">Kaggle Learn — Pandas</a>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Muy recomendado</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ───────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="http://programacion.espol.edu.ec/" target="_blank">Página del Curso</a></li>
+                <li><a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank">Ejercicios Resueltos</a></li>
+                <li><a href="https://pandas.pydata.org/docs/user_guide/10min.html" target="_blank">Docs · Pandas</a></li>
+                <li><a href="https://numpy.org/doc/stable/user/absolute_beginners.html" target="_blank">Docs · Numpy</a></li>
+                <li><a href="https://www.kaggle.com/learn/pandas" target="_blank">Kaggle Learn</a></li>
+            </ul>
+            <div class="footer-bottom">
+                <span>©2026 Carlos Cedeño · ESPOL · CCPG1043</span>
+                <span>
+                    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+                       class="link-inline"
+                       style="color:var(--mute)"
+                       target="_blank">CC BY-NC-SA 4.0</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
