@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de Programación - Unidad 05: Diccionarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Cal Sans'; src: url('https://unpkg.com/cal-sans@1.0.1/fonts/CalSans-SemiBold.woff2') format('woff2'); font-weight: 600; }
+        .reveal { background-color: #ffffff; font-family: 'Inter', sans-serif; color: #242424; }
+        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cal Sans', sans-serif; font-weight: 600; color: #242424; text-transform: none; margin-bottom: 24px; }
+        .reveal h1 { font-size: 64px; line-height: 1.10; } .reveal h2 { font-size: 48px; line-height: 1.10; } .reveal h3 { font-size: 24px; line-height: 1.30; }
+        .reveal p, .reveal li { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.50; letter-spacing: -0.2px; color: #242424; text-align: left; }
+        .text-muted { color: #898989 !important; } .text-small { font-size: 20px !important; } .text-bold { font-weight: 600 !important; color: #111111; }
+        .cal-card { background: #ffffff; border-radius: 12px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; margin-bottom: 20px; }
+        .cal-card-compact { padding: 20px; margin-bottom: 0; } .cal-card-compact h3 { font-size: 20px; margin-bottom: 8px; } .cal-card-compact p { font-size: 16px; line-height: 1.4; margin: 0; color: #898989; }
+        .grid-2 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-2 > div { flex: 1; }
+        .grid-3 { display: flex; gap: 24px; text-align: left; margin-top: 40px; } .grid-3 > div { flex: 1; }
+        .grid-3 h3, .grid-2 h3 { font-size: 20px; margin-bottom: 12px; } .grid-3 p, .grid-2 p { font-size: 18px; color: #898989; }
+        .reveal pre { background: #242424; border-radius: 8px; box-shadow: rgba(19,19,22,0.7) 0px 1px 5px -4px, rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 8px 0px; padding: 24px; width: 100%; text-align: left; box-sizing: border-box; overflow-x: auto; margin: 0; }
+        .reveal pre code { font-family: 'Roboto Mono', monospace !important; font-weight: 400; color: #f8f9fa; font-size: 22px; line-height: 1.5; text-align: left; white-space: pre; display: block; }
+        .reveal .footer { position: absolute; bottom: 20px; left: 24px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #898989; z-index: 1000; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="footer">Msc. Carlos Cedeño • Fundamentos de Programación • ESPOL</div>
+        <div class="slides">
+
+            <!-- PORTADA -->
+            <section data-state="cover">
+                <div style="text-align: left; padding-top: 50px;">
+                    <p class="text-muted" style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                        Escuela Superior Politécnica del Litoral
+                    </p>
+                    <h1 style="font-size: 72px; margin-bottom: 0; line-height: 1;">
+                        Diccionarios
+                    </h1>
+                    <h2 class="text-muted" style="font-size: 36px; margin-top: 10px; font-weight: 400;">
+                        Unidad 05
+                    </h2>
+                    <div style="width: 60px; height: 2px; background: #242424; margin: 40px 0;"></div>
+                    <p style="font-size: 24px; color: #242424; max-width: 700px; font-weight: 300;">
+                        Colecciones de pares <code>clave: valor</code> — cómo crearlas, acceder a sus datos y modificarlas.
+                    </p>
+                </div>
+            </section>
+
+            <!-- OBJETIVOS -->
+            <section>
+                <h2 class="text-muted">Antes de Empezar</h2>
+                <h1>Objetivos de la Clase</h1>
+                <div class="cal-card">
+                    <ul style="padding-left: 24px;">
+                        <li>Comprender qué es un diccionario y en qué se diferencia de una lista.</li>
+                        <li>Crear diccionarios y acceder a sus valores de forma directa y segura.</li>
+                        <li>Añadir, modificar y eliminar pares clave-valor.</li>
+                        <li>Conocer los métodos <code>.keys()</code>, <code>.values()</code> y <code>.items()</code>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECCIÓN A: QUÉ ES UN DICCIONARIO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Una Nueva Colección</h2>
+                    <h1>¿Qué es un Diccionario?</h1>
+                    <div class="cal-card">
+                        <p>Imagina una agenda telefónica: cada <b>nombre</b> tiene asociado un <b>número</b>. Un diccionario en Python funciona igual — guarda datos como pares <code class="text-bold">clave: valor</code>.</p>
+                    </div>
+                    <ul style="padding-left: 24px;">
+                        <li>Son colecciones <b>desordenadas</b> de elementos.</li>
+                        <li>Cada clave es <b>única</b> y sirve para acceder a su valor.</li>
+                        <li>Son <b>mutables</b>: se pueden añadir, modificar o eliminar elementos.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">La Sintaxis</h2>
+                    <h1>Llaves y pares clave-valor</h1>
+                    <div class="cal-card">
+                        <p>Se definen con llaves <code class="text-bold">{ }</code> y pares <code>clave: valor</code> separados por comas.</p>
+                    </div>
+                    <pre><code class="language-python">mi_diccionario = {
+    "clave1": "valor1",
+    "clave2": "valor2",
+    "clave3": "valor3"
+}</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">La <b>clave</b> debe ser un dato inmutable (string, número). El <b>valor</b> puede ser de cualquier tipo, incluso otra lista o diccionario.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN B: CREACIÓN -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Creación de Diccionarios</h2>
+                    <h1>Diccionarios vacíos</h1>
+                    <div class="cal-card">
+                        <p>Se puede crear un diccionario vacío y añadir elementos después, con <code class="text-bold">{}</code> o con <code class="text-bold">dict()</code>.</p>
+                    </div>
+                    <pre><code class="language-python">diccionario_vacio = {}
+# O también
+diccionario_vacio = dict()</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Creación de Diccionarios</h2>
+                    <h1>Con datos iniciales</h1>
+                    <pre><code class="language-python">persona = {
+    "nombre": "Ana",
+    "edad": 30,
+    "ciudad": "Madrid"
+}
+
+productos = {
+    101: "Laptop",
+    102: "Mouse",
+    103: "Teclado"
+}</code></pre>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small">Las claves no tienen que ser strings — en <code>productos</code> son números enteros usados como código.</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIÓN C: ACCESO -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Acceso a Elementos</h2>
+                    <h1>Acceso directo con []</h1>
+                    <div class="cal-card">
+                        <p>Se accede a un valor usando su clave entre corchetes <code class="text-bold">[ ]</code>.</p>
+                    </div>
+                    <pre><code class="language-python">persona = {"nombre": "Ana", "edad": 30}
+
+print(persona["nombre"])  # Ana
+print(persona["edad"])    # 30</code></pre>
+                    <div class="cal-card" style="margin-top: 24px; border: 2px solid #d32f2f;">
+                        <p class="text-small">¡Cuidado! Si la clave no existe, Python lanza un <code>KeyError</code>.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Acceso a Elementos</h2>
+                    <h1>Acceso seguro con .get()</h1>
+                    <div class="cal-card">
+                        <p>Para evitar el <code class="text-bold">KeyError</code>, usa <code class="text-bold">.get()</code>. Devuelve <code>None</code> — o un valor por defecto — si la clave no existe.</p>
+                    </div>
+                    <pre><code class="language-python">persona = {"nombre": "Ana", "edad": 30}
+
+print(persona.get("nombre"))               # Ana
+print(persona.get("telefono"))             # None
+print(persona.get("pais", "Desconocido"))  # Desconocido</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN D: MODIFICAR -->
+            <section>
+                <h2 class="text-muted">Diccionarios Mutables</h2>
+                <h1>Añadir y modificar elementos</h1>
+                <div class="grid-2">
+                    <div class="cal-card">
+                        <h3>Añadir un nuevo par</h3>
+                        <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 18px;">persona = {"nombre": "Ana"}
+persona["edad"] = 30
+print(persona)
+# {'nombre': 'Ana', 'edad': 30}</code></pre>
+                    </div>
+                    <div class="cal-card">
+                        <h3>Modificar un valor</h3>
+                        <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 18px;">persona = {"nombre": "Ana", "edad": 30}
+persona["edad"] = 31
+print(persona)
+# {'nombre': 'Ana', 'edad': 31}</code></pre>
+                    </div>
+                </div>
+                <div class="cal-card" style="margin-top: 24px;">
+                    <p class="text-small">La misma sintaxis <code>diccionario[clave] = valor</code> sirve para <b>añadir</b> (si la clave no existe) o <b>modificar</b> (si ya existe).</p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN E: ELIMINAR -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Eliminar Elementos</h2>
+                    <h1>del y .pop()</h1>
+                    <div class="grid-2">
+                        <div class="cal-card">
+                            <h3><code>del</code></h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 18px;">persona = {"nombre": "Ana", "edad": 30}
+del persona["edad"]
+print(persona)
+# {'nombre': 'Ana'}</code></pre>
+                        </div>
+                        <div class="cal-card">
+                            <h3><code>.pop()</code></h3>
+                            <pre style="margin-top: 12px;"><code class="language-python" style="font-size: 18px;">persona = {"nombre": "Ana", "edad": 30}
+edad = persona.pop("edad")
+print(edad)      # 30
+print(persona)   # {'nombre': 'Ana'}</code></pre>
+                        </div>
+                    </div>
+                    <div class="cal-card" style="margin-top: 24px;">
+                        <p class="text-small"><code>.pop()</code> elimina el par y además <b>devuelve</b> el valor eliminado — útil cuando lo necesitas antes de descartarlo.</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Eliminar Elementos</h2>
+                    <h1>.clear()</h1>
+                    <div class="cal-card">
+                        <p>Elimina <b>todos</b> los elementos, dejando el diccionario vacío.</p>
+                    </div>
+                    <pre><code class="language-python">diccionario = {"a": 1, "b": 2}
+diccionario.clear()
+print(diccionario)  # {}</code></pre>
+                </section>
+            </section>
+
+            <!-- SECCIÓN F: MÉTODOS ÚTILES -->
+            <section>
+                <h2 class="text-muted">Explorando el Contenido</h2>
+                <h1>.keys(), .values(), .items()</h1>
+                <div class="cal-card">
+                    <ul style="padding-left: 24px;">
+                        <li><code class="text-bold">.keys()</code> — vista con todas las claves.</li>
+                        <li><code class="text-bold">.values()</code> — vista con todos los valores.</li>
+                        <li><code class="text-bold">.items()</code> — vista con pares clave-valor como tuplas.</li>
+                    </ul>
+                </div>
+                <pre><code class="language-python">estudiante = {"nombre": "Luis", "carrera": "Sistemas", "id": 123}
+
+print(estudiante.keys())    # dict_keys(['nombre', 'carrera', 'id'])
+print(estudiante.values())  # dict_values(['Luis', 'Sistemas', 123])
+print(estudiante.items())   # dict_items([('nombre', 'Luis'), ('carrera', 'Sistemas'), ('id', 123)])</code></pre>
+            </section>
+
+            <!-- SECCIÓN G: EJERCICIOS -->
+            <section>
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 1: Registro de un Producto</h1>
+                    <div class="cal-card">
+                        <p>Crea un diccionario <code class="text-bold">producto</code> con las claves <code>"nombre"</code>, <code>"precio"</code> y <code>"stock"</code>. Luego:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li>Imprime el precio accediendo con <code>[]</code>.</li>
+                            <li>Aumenta el stock en 10 unidades.</li>
+                            <li>Usa <code>.get()</code> para leer una clave <code>"categoria"</code> que no existe, con valor por defecto <code>"Sin categoría"</code>.</li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python"># Hint: producto["stock"] = producto["stock"] + 10
+producto = {"nombre": "Teclado", "precio": 25.5, "stock": 12}</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="text-muted">Práctica</h2>
+                    <h1>Ejercicio 2: Actualizar un Inventario</h1>
+                    <div class="cal-card">
+                        <p>Dado el diccionario <code class="text-bold">inventario</code>, escribe código que:</p>
+                        <ul style="font-size: 22px; padding-left: 24px; margin-top: 12px;">
+                            <li>Elimine el producto <code>"peras"</code> con <code>.pop()</code> y muestre cuántas unidades tenía.</li>
+                            <li>Añada un nuevo producto <code>"kiwis"</code> con 15 unidades.</li>
+                            <li>Imprima todas las claves del inventario final con <code>.keys()</code>.</li>
+                        </ul>
+                    </div>
+                    <pre><code class="language-python">inventario = {"manzanas": 50, "peras": 20, "uvas": 35}</code></pre>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'fade',
+            controls: true,
+            progress: true
+        });
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

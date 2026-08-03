@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5 — Diccionarios · CCPG1043</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:                   #201d1d;
+            --ink-deep:              #0f0000;
+            --canvas:                #fdfcfc;
+            --surface-soft:          #f8f7f7;
+            --surface-card:          #f1eeee;
+            --hairline:              rgba(15,0,0,0.12);
+            --hairline-strong:       #646262;
+            --body:                  #424245;
+            --mute:                  #646262;
+            --ash:                   #9a9898;
+            --on-dark:               #fdfcfc;
+            --font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace,
+                    'SFMono-Regular', Menlo, Monaco, Consolas,
+                    'Liberation Mono', 'Courier New', monospace;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Container ──────────────────────────────── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Nav ────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--canvas);
+            border-bottom: 1px solid var(--hairline);
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            width: 100%;
+        }
+
+        .nav-wordmark {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* ── Buttons ────────────────────────────────── */
+        .btn-primary {
+            background: var(--ink);
+            color: var(--canvas) !important;
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            padding: 4px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none !important;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .btn-primary:active { background: var(--ink-deep); }
+
+        /* ── Page Header ─────────────────────────────── */
+        .page-header {
+            padding: 64px 0 56px;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--mute);
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--ink);
+            max-width: 680px;
+            margin-bottom: 20px;
+        }
+
+        .section-body {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--body);
+            max-width: 680px;
+        }
+
+        /* ── Sections ───────────────────────────────── */
+        .section {
+            padding: 64px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .section-rule {
+            border: none;
+            border-top: 1px solid var(--hairline);
+            margin-bottom: 32px;
+        }
+
+        /* ── List rows ──────────────────────────────── */
+        .list-rows { margin-top: 0; }
+
+        .list-row {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--body);
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+        }
+
+        .list-row:last-child { border-bottom: none; }
+
+        .list-marker {
+            color: var(--ink);
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+
+        .list-label {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        /* ── Module rows (clickable) ────────────────── */
+        a.module-row {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a.module-row:last-child { border-bottom: none; }
+        a.module-row:hover .list-label { text-decoration: underline; }
+
+        /* ── Shortcuts ──────────────────────────────── */
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .shortcut-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .shortcut-sublabel {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+        }
+
+        .code-block {
+            background: var(--surface-soft);
+            border: 1px solid var(--hairline);
+            padding: 14px 18px;
+            font-size: 13px;
+            font-family: var(--font);
+            color: var(--body);
+            overflow-x: auto;
+            line-height: 1.7;
+            white-space: pre;
+        }
+
+        /* ── Links ──────────────────────────────────── */
+        a.link-inline {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        /* ── Footer ─────────────────────────────────── */
+        .footer { padding: 32px 0; }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+            border: 1px solid var(--hairline);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .footer-links li {
+            flex: 1;
+            border-right: 1px solid var(--hairline);
+        }
+
+        .footer-links li:last-child { border-right: none; }
+
+        .footer-links a {
+            display: block;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 2;
+            color: var(--mute);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover { color: var(--ink); text-decoration: underline; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            line-height: 2;
+            color: var(--mute);
+        }
+
+        /* ── Responsive ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-title { font-size: 22px; }
+            .page-header, .section { padding: 40px 0; }
+            .shortcut-grid { grid-template-columns: 1fr; }
+            .module-row, a.module-row, .list-row { align-items: flex-start; }
+            .list-label { display: block; }
+            .footer-links { flex-wrap: wrap; }
+            .footer-links li { flex: 1 1 50%; }
+            .footer-bottom { flex-direction: column; gap: 0; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .page-title { font-size: 20px; }
+            .code-block { font-size: 12px; }
+            .footer-links li { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVIGATION ───────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="../" class="nav-wordmark">CCPG1043</a>
+                <ul class="nav-links">
+                    <li><a href="#contenido">Contenido</a></li>
+                    <li><a href="#shortcuts">Shortcuts</a></li>
+                    <li><a href="#recursos">Recursos</a></li>
+                </ul>
+                <a href="mailto:caencede@espol.edu.ec" class="btn-primary">Contacto →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── PAGE HEADER ──────────────────────────────── -->
+    <div class="page-header">
+        <div class="container">
+            <p class="breadcrumb">
+                <a href="../" class="link-inline" style="color:var(--mute);text-decoration:none;">CCPG1043</a>
+                &nbsp;/&nbsp;Módulo 5
+            </p>
+            <h1 class="page-title">Módulo 5 — Diccionarios</h1>
+            <p class="section-body">
+                Este módulo introduce los <code>diccionarios</code>, la estructura de Python para almacenar
+                datos como pares <code>clave: valor</code>. Se cubre cómo crearlos, acceder y modificar sus
+                elementos de forma segura, y las tres formas de recorrerlos con un bucle <code>for</code>
+                para buscar, filtrar y combinar información.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── CONTENIDO ────────────────────────────────── -->
+    <section class="section" id="contenido">
+        <div class="container">
+            <p class="section-label">Contenido</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <a href="5.1%20Diccionarios.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">5.1 Diccionarios</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Creación, acceso con [] y .get(), añadir/modificar/eliminar, .keys()/.values()/.items()</span>
+                    </span>
+                </a>
+                <a href="5.2%20Iterar%20diccionarios.html" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">5.2 Iterar diccionarios</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Iterar sobre claves, valores e items; búsqueda por clave, .get() y por valor</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SHORTCUTS ────────────────────────────────── -->
+    <section class="section" id="shortcuts">
+        <div class="container">
+            <p class="section-label">Shortcuts de Python útiles en este módulo</p>
+            <hr class="section-rule">
+            <div class="shortcut-grid">
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Crear y acceder</p>
+                    <pre class="code-block">persona = {"nombre": "Ana", "edad": 30}
+
+print(persona["nombre"])          # Ana
+print(persona.get("telefono"))    # None
+print(persona.get("pais", "N/A")) # N/A (valor por defecto)</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Añadir, modificar y eliminar</p>
+                    <pre class="code-block">persona["edad"] = 31         # modifica (la clave ya existe)
+persona["ciudad"] = "Quito"  # añade (clave nueva)
+
+del persona["ciudad"]
+edad = persona.pop("edad")   # elimina y devuelve el valor</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">.keys() / .values() / .items()</p>
+                    <pre class="code-block">d = {"a": 1, "b": 2}
+
+d.keys()    # dict_keys(['a', 'b'])
+d.values()  # dict_values([1, 2])
+d.items()   # dict_items([('a', 1), ('b', 2)])</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Iterar con .items()</p>
+                    <pre class="code-block">inventario = {"manzanas": 50, "peras": 20}
+
+for fruta, cantidad in inventario.items():
+    print(f"Hay {cantidad} unidades de {fruta}")</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Búsqueda por clave</p>
+                    <pre class="code-block">contactos = {"Ana": "555-1234"}
+
+if "Ana" in contactos:
+    print(contactos["Ana"])
+else:
+    print("No encontrado")</pre>
+                </div>
+
+                <div class="shortcut-group">
+                    <p class="shortcut-sublabel">Búsqueda por valor</p>
+                    <pre class="code-block">notas = {"Ana": 9.5, "Luis": 7.0, "Eva": 9.5}
+
+altas = []
+for nombre, nota in notas.items():
+    if nota == 9.5:
+        altas.append(nombre)</pre>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── RECURSOS ─────────────────────────────────── -->
+    <section class="section" id="recursos">
+        <div class="container">
+            <p class="section-label">Recursos adicionales</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://programacion.espol.edu.ec/" target="_blank" class="link-inline">Página oficial de la materia</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank" class="link-inline">Ejercicios y exámenes resueltos</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries" target="_blank" class="link-inline">Documentación Python — Diccionarios</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://peps.python.org/pep-0008/#programming-recommendations" target="_blank" class="link-inline">PEP 8 — Recomendaciones de programación</a>
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[→]</span>
+                    <span>
+                        <a href="https://cs50.harvard.edu/python/weeks/6/" target="_blank" class="link-inline">CS50 Python — Harvard · Semana 6: File I/O (uso de diccionarios)</a>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Muy recomendado</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ───────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="http://programacion.espol.edu.ec/" target="_blank">Página del Curso</a></li>
+                <li><a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank">Ejercicios Resueltos</a></li>
+                <li><a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries" target="_blank">Docs · Diccionarios</a></li>
+                <li><a href="https://peps.python.org/pep-0008/" target="_blank">PEP 8</a></li>
+                <li><a href="https://cs50.harvard.edu/python/weeks/6/" target="_blank">CS50 Python</a></li>
+            </ul>
+            <div class="footer-bottom">
+                <span>©2026 Carlos Cedeño · ESPOL · CCPG1043</span>
+                <span>
+                    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+                       class="link-inline"
+                       style="color:var(--mute)"
+                       target="_blank">CC BY-NC-SA 4.0</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

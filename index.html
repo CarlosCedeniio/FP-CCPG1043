@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de Programación — CCPG1043</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:                   #201d1d;
+            --ink-deep:              #0f0000;
+            --canvas:                #fdfcfc;
+            --surface-soft:          #f8f7f7;
+            --surface-card:          #f1eeee;
+            --surface-dark:          #201d1d;
+            --surface-dark-elevated: #302c2c;
+            --hairline:              rgba(15,0,0,0.12);
+            --hairline-strong:       #646262;
+            --body:                  #424245;
+            --mute:                  #646262;
+            --ash:                   #9a9898;
+            --on-dark:               #fdfcfc;
+            --green:                 #30d158;
+            --font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace,
+                    'SFMono-Regular', Menlo, Monaco, Consolas,
+                    'Liberation Mono', 'Courier New', monospace;
+        }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Container ──────────────────────────────── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Nav ────────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--canvas);
+            border-bottom: 1px solid var(--hairline);
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            width: 100%;
+        }
+
+        .nav-wordmark {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* ── Buttons ────────────────────────────────── */
+        .btn-primary {
+            background: var(--ink);
+            color: var(--canvas) !important;   /* fix: override .nav-links a */
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            padding: 4px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none !important;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .btn-primary:active { background: var(--ink-deep); }
+
+        .btn-secondary {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2;
+            padding: 4px 20px;
+            border-radius: 4px;
+            border: 1px solid var(--hairline-strong);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* ── Terminal Hero ───────────────────────────── */
+        .hero-outer {
+            background: #141414;
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-window {
+            width: 100%;
+            max-width: 720px;
+            background: #1c1c1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 28px 80px rgba(0,0,0,0.8),
+                        0 0 0 1px rgba(255,255,255,0.07);
+        }
+
+        .term-bar {
+            background: #2c2c2e;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .term-dots { display: flex; gap: 8px; z-index: 1; }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .dot-r { background: #ff5f57; }
+        .dot-y { background: #febc2e; }
+        .dot-g { background: #28c840; }
+
+        .term-bar-title {
+            position: absolute; left: 0; right: 0;
+            text-align: center;
+            font-size: 12px; font-weight: 500;
+            color: #636366;
+            pointer-events: none;
+        }
+
+        .term-body {
+            padding: 18px 22px 24px;
+            min-height: 360px;
+            font-size: 13px;
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-y: auto;
+            max-height: 440px;
+        }
+
+        .tl { min-height: 1.7em; }
+
+        /* Terminal text colors */
+        .tc-dim  { color: #636366; }
+        .tc-w    { color: #e8e8e8; }
+        .tc-wbold{ color: #ffffff; font-weight: 600; }
+        .tc-g    { color: #30d158; }
+
+        /* ASCII art block */
+        .t-art {
+            font-size: 13px;
+            line-height: 1.3;
+            color: #30d158;
+            text-shadow: 0 0 20px rgba(48,209,88,0.55),
+                         0 0 6px  rgba(48,209,88,0.3);
+            white-space: pre;
+            display: block;
+            margin: 4px 0;
+            animation: artFlash 0.4s ease-out;
+        }
+
+        @keyframes artFlash {
+            0%   { opacity: 0; filter: blur(4px) brightness(2.5); }
+            100% { opacity: 1; filter: blur(0)   brightness(1);   }
+        }
+
+        /* Block cursor */
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        .cur {
+            display: inline-block;
+            width: 7px; height: 13px;
+            background: #e8e8e8;
+            vertical-align: -2px;
+            animation: blink 1s step-end infinite;
+        }
+
+
+        @media (max-width: 768px) {
+            .hero-outer { padding: 24px 16px; }
+            .term-body  { font-size: 11px; min-height: 280px; }
+            .t-art      { font-size: 9px; }
+        }
+        @media (max-width: 480px) {
+            .term-body { font-size: 9px; }
+            .t-art     { font-size: 7px; }
+        }
+
+        /* ── Hero Headline ──────────────────────────── */
+        .hero-section {
+            padding: 96px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .display-xl {
+            font-size: 38px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--ink);
+            max-width: 680px;
+        }
+
+        .badge {
+            background: var(--surface-dark);
+            color: var(--on-dark);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .section-body {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--body);
+            max-width: 680px;
+        }
+
+        /* ── Sections ───────────────────────────────── */
+        .section {
+            padding: 96px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .section-rule {
+            border: none;
+            border-top: 1px solid var(--hairline);
+            margin-bottom: 32px;
+        }
+
+        /* ── List rows ──────────────────────────────── */
+        .list-rows { margin-top: 0; }
+
+        .list-row {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--body);
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+        }
+
+        .list-row:last-child { border-bottom: none; }
+
+        .list-marker {
+            color: var(--ink);
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 28px;
+        }
+
+        .list-label {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        /* ── Module rows ────────────────────────────── */
+        .module-row {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--hairline);
+            font-size: 16px;
+            display: flex;
+            gap: 14px;
+            align-items: baseline;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .module-row:last-child { border-bottom: none; }
+        a.module-row:hover .list-label { text-decoration: underline; }
+
+        /* ── Instructor ─────────────────────────────── */
+        dl.instructor-meta { margin-top: 32px; }
+
+        dl.instructor-meta dt {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 2;
+            margin-top: 16px;
+        }
+
+        dl.instructor-meta dt:first-child { margin-top: 0; }
+
+        dl.instructor-meta dd {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--body);
+        }
+
+        /* ── Links ──────────────────────────────────── */
+        a.link-inline {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        /* ── Footer ─────────────────────────────────── */
+        .footer { padding: 32px 0; }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+            border: 1px solid var(--hairline);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .footer-links li {
+            flex: 1;
+            border-right: 1px solid var(--hairline);
+        }
+
+        .footer-links li:last-child { border-right: none; }
+
+        .footer-links a {
+            display: block;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 2;
+            color: var(--mute);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover { color: var(--ink); text-decoration: underline; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            line-height: 2;
+            color: var(--mute);
+        }
+
+        /* ── Responsive ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .display-xl { font-size: 28px; }
+            .hero-section, .section { padding: 48px 0; }
+            .module-row, .list-row { align-items: flex-start; }
+            .list-label { display: block; }
+            .footer-links { flex-wrap: wrap; }
+            .footer-links li { flex: 1 1 50%; }
+            .footer-bottom { flex-direction: column; gap: 0; text-align: center; }
+            .tui-fp   { font-size: 9px; }
+            .tui-espol { font-size: 7px; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .footer-links li { flex: 1 1 100%; }
+            .tui-fp   { font-size: 7px; }
+            .tui-espol { font-size: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVIGATION ───────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="https://carloscedeniio.github.io/FP-CCPG1043/" class="nav-wordmark">CCPG1043</a>
+                <ul class="nav-links">
+                    <li><a href="#modulos">Módulos</a></li>
+                    <li><a href="#objetivos">Objetivos</a></li>
+                    <li><a href="#instructor">Instructor</a></li>
+                    <li><a href="./ejercicios/">Ejercicios</a></li>
+                </ul>
+                <a href="mailto:caencede@espol.edu.ec" class="btn-primary">Contacto →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── TERMINAL HERO ────────────────────────────── -->
+    <div class="hero-outer">
+        <div class="hero-window">
+            <div class="term-bar">
+                <div class="term-dots">
+                    <span class="dot dot-r"></span>
+                    <span class="dot dot-y"></span>
+                    <span class="dot dot-g"></span>
+                </div>
+                <span class="term-bar-title">python — ccpg1043@espol</span>
+            </div>
+            <div id="term-body" class="term-body"></div>
+        </div>
+    </div>
+
+    <!-- ── HERO HEADLINE ────────────────────────────── -->
+    <div class="hero-section">
+        <div class="container">
+            <span class="badge">2026 PAO I</span>
+            <h1 class="display-xl">Fundamentos de<br>Programación</h1>
+            <p class="section-body" style="margin-top:24px">
+                El curso de formación básica presenta a los estudiantes estrategias para la resolución de problemas comunes en diversos campos profesionales por medio del diseño e implementación de soluciones basadas en el uso de un lenguaje de programación. Cubre los principios básicos para que el estudiante pueda leer y escribir programas, haciendo énfasis en el diseño y análisis de algoritmos. Además, introduce a los estudiantes en el uso de herramientas de desarrollo y depuración.
+            </p>
+            <p class="section-body" style="margin-top:16px">
+                Este curso está dirigido a estudiantes sin experiencia previa en programación que deseen adquirir una base sólida en el pensamiento computacional y la programación utilizando Python.
+            </p>
+            <div style="display:flex;gap:12px;margin-top:32px;flex-wrap:wrap">
+                <a href="#modulos" class="btn-primary">Ver Módulos →</a>
+                <a href="mailto:caencede@espol.edu.ec" class="btn-secondary">Contactar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MÓDULOS ───────────────────────────────────── -->
+    <section class="section" id="modulos">
+        <div class="container">
+            <p class="section-label">Estructura del Curso</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <a href="./Módulo 1  - Introducción y Ambientes de Programación/" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Módulo 1 — Introducción y Ambientes de Programación</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Historia de Python · ambientes de desarrollo · primeras instrucciones</span>
+                    </span>
+                </a>
+                <a href="./Módulo 2 - Tipos de datos, operadores, cadenas, listas y aleatoriedad/" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Módulo 2 — Tipos de datos, Cadenas, Listas y Aleatoriedad</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Variables · f-strings · strings · listas · módulo random</span>
+                    </span>
+                </a>
+                <a href="./Módulo 3 - Funciones/" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Módulo 3 — Funciones</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Definición · parámetros · scope local · funciones booleanas · composición</span>
+                    </span>
+                </a>
+                <a href="./Módulo 4 - Estructuras de control/" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Módulo 4 — Estructuras de Control</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">if · for · while</span>
+                    </span>
+                </a>
+                <a href="./Módulo 5 - Diccionarios/" class="module-row">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Módulo 5 — Diccionarios</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Creación · acceso · .get() · iterar con .items() · búsqueda</span>
+                    </span>
+                </a>
+                <div class="module-row">
+                    <span class="list-marker">[·]</span>
+                    <span>
+                        <span class="list-label" style="color:var(--mute)">Módulo 6 — Pandas</span>
+                        &nbsp;&nbsp;<span style="color:var(--ash);font-size:14px">Próximamente</span>
+                    </span>
+                </div>
+                <a href="./ejercicios/" class="module-row" style="border-top: 1px solid var(--hairline-strong); margin-top: 8px; padding-top: 20px;">
+                    <span class="list-marker">[+]</span>
+                    <span>
+                        <span class="list-label">Ejercicios</span>
+                        &nbsp;&nbsp;<span style="color:var(--mute);font-size:14px">Enunciados de práctica · filtra por tema · busca por tag</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── OBJETIVOS ────────────────────────────────── -->
+    <section class="section" id="objetivos">
+        <div class="container">
+            <p class="section-label">Objetivos de Aprendizaje</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[+]</span>
+                    <span><span class="list-label">Resolución de problemas</span>&nbsp;&nbsp;Aplicar estrategias para diseñar e implementar soluciones con Python en campos profesionales.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[+]</span>
+                    <span><span class="list-label">Lectura y escritura de código</span>&nbsp;&nbsp;Comprender y aplicar los principios básicos para leer y escribir programas de computadora.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[+]</span>
+                    <span><span class="list-label">Diseño de algoritmos</span>&nbsp;&nbsp;Desarrollar habilidades en el diseño y análisis de algoritmos fundamentales.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[+]</span>
+                    <span><span class="list-label">Herramientas de desarrollo</span>&nbsp;&nbsp;Utilizar herramientas básicas de desarrollo y depuración para crear y probar programas.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[+]</span>
+                    <span><span class="list-label">Base sólida</span>&nbsp;&nbsp;Construir fundamentos para continuar aprendiendo conceptos más avanzados de programación.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PRERREQUISITOS ───────────────────────────── -->
+    <section class="section">
+        <div class="container">
+            <p class="section-label">Prerrequisitos</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[x]</span>
+                    <span>No se requiere experiencia previa en programación.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[x]</span>
+                    <span>Disposición para aprender, practicar y resolver problemas.</span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[x]</span>
+                    <span>Acceso a una computadora con conexión a internet.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── INSTRUCTOR ───────────────────────────────── -->
+    <section class="section" id="instructor">
+        <div class="container">
+            <p class="section-label">Instructor</p>
+            <hr class="section-rule">
+            <dl class="instructor-meta">
+                <dt>Nombre</dt>
+                <dd>Carlos Cedeño Zamora</dd>
+                <dt>Formación</dt>
+                <dd>Máster en Data Science · Ingeniero en Telemática</dd>
+                <dt>Contacto formal</dt>
+                <dd><a href="mailto:caencede@espol.edu.ec" class="link-inline">caencede@espol.edu.ec</a></dd>
+                <dt>Institución</dt>
+                <dd>ESPOL · Escuela Superior Politécnica del Litoral</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ── AYUDA ────────────────────────────────────── -->
+    <section class="section">
+        <div class="container">
+            <p class="section-label">¿Cómo Obtener Ayuda?</p>
+            <hr class="section-rule">
+            <div class="list-rows">
+                <div class="list-row">
+                    <span class="list-marker">[1]</span>
+                    <span>
+                        <span class="list-label">Correo Electrónico</span>&nbsp;&nbsp;Contacto directo a
+                        <a href="mailto:caencede@espol.edu.ec" class="link-inline">caencede@espol.edu.ec</a>
+                        para consultas formales.
+                    </span>
+                </div>
+                <div class="list-row">
+                    <span class="list-marker">[2]</span>
+                    <span>
+                        <span class="list-label">Foro en Aula Virtual</span>&nbsp;&nbsp;Las preguntas en el foro del AV benefician a todos los estudiantes y construyen una base de conocimiento colaborativa.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ───────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="http://programacion.espol.edu.ec/" target="_blank">Página del Curso</a></li>
+                <li><a href="http://blog.espol.edu.ec/ccpg1001/" target="_blank">Ejercicios Resueltos</a></li>
+                <li><a href="https://www.mclibre.org/consultar/python/" target="_blank">Python3 · Valencia</a></li>
+                <li><a href="https://cs50.harvard.edu/python/weeks/0/" target="_blank">CS50 Python</a></li>
+                <li><a href="https://github.com/" target="_blank">GitHub</a></li>
+            </ul>
+            <div class="footer-bottom">
+                <span>©2026 Carlos Cedeño · ESPOL · CCPG1043</span>
+                <span>
+                    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+                       class="link-inline"
+                       style="color:var(--mute)"
+                       target="_blank">CC BY-NC-SA 4.0</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (async () => {
+        const tb = document.getElementById('term-body');
+        if (!tb) return;
+
+        let rows = [];
+
+        const R   = () => { tb.innerHTML = rows.map(r => `<div class="tl">${r}</div>`).join(''); tb.scrollTop = tb.scrollHeight; };
+        const add = (h = '') => { rows.push(h); R(); return rows.length - 1; };
+        const set = (i, h)   => { rows[i] = h; R(); };
+        const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const wait = ms => new Promise(r => setTimeout(r, ms));
+
+        // FP pixel art — F: 12-wide, P: 12-wide, gap: 5 spaces = 29 chars total
+        const ART =
+`████████████     ███████████
+████             ████      ██
+████             ████      ██
+████████         ███████████
+████             ████
+████             ████
+████             ████
+████             ████        `;
+
+        const typeRow = async (text, cls, speed) => {
+            const idx = add('');
+            for (let i = 0; i <= text.length; i++) {
+                const cur = i < text.length ? '<span class="cur"> </span>' : '';
+                set(idx, `<span class="${cls}">${esc(text.slice(0, i))}</span>${cur}`);
+                if (i < text.length) await wait(speed);
+            }
+        };
+
+        await wait(350);
+
+            // Step 1: type the command
+            const cmdRow = add(`<span class="tc-dim">ccpg1043@espol:~$</span> `);
+            const cmd = 'python welcome.py';
+            for (let i = 0; i <= cmd.length; i++) {
+                const cur = i < cmd.length ? '<span class="cur"> </span>' : '';
+                set(cmdRow, `<span class="tc-dim">ccpg1043@espol:~$</span> <span class="tc-w">${esc(cmd.slice(0, i))}</span>${cur}`);
+                if (i < cmd.length) await wait(28);
+            }
+            await wait(350);
+
+            // Step 2: boot message
+            add(`<span class="tc-dim">Iniciando entorno CCPG1043...</span>`);
+            await wait(260);
+
+            // Step 3: progress bar
+            const pbRow = add('');
+            for (let i = 0; i <= 20; i++) {
+                set(pbRow,
+                    `<span class="tc-dim">Cargando  </span>` +
+                    `<span class="tc-g">[` + '█'.repeat(i) + '░'.repeat(20 - i) + `]</span>` +
+                    `<span class="tc-dim"> ${String(Math.round(i / 20 * 100)).padStart(3)}%</span>`
+                );
+                await wait(58);
+            }
+            await wait(420);
+
+            // Step 4: ASCII art reveal
+            add('');
+            add(`<pre class="t-art">${ART}</pre>`);
+            await wait(620);
+
+            // Step 5: typewriter info
+            await typeRow('ESPOL  ·  CCPG1043  ·  2026 PAO I', 'tc-wbold', 30);
+            await typeRow('Fundamentos de Programación', 'tc-dim', 26);
+            await wait(360);
+
+            add('');
+            await wait(200);
+            add(`<span class="tc-dim">Profesor  ·</span>  <span class="tc-w">Carlos Cedeño</span>`);
+            await wait(300);
+            add(`<span class="tc-dim">Período   ·</span>  <span class="tc-w">2026 PAO I</span>`);
+            await wait(460);
+            add('');
+            await wait(200);
+            add(`<span class="tc-g">❯</span> <span class="cur"> </span>`);
+
+    })();
+    </script>
+</body>
+</html>
