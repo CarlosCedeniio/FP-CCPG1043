@@ -1,5 +1,5 @@
 # Fundamentos de Programación
-# 2026 PAO I
+# 2026 PAO II
 
 ### Prof. Carlos Cedeño
 
